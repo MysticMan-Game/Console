@@ -1,6 +1,8 @@
-﻿namespace MysticMan.ConsoleApp{
-  public class Header : Panel {
-    public Header() {
+﻿using MysticMan.ConsoleApp.Panels;
+
+namespace MysticMan.ConsoleApp{
+  public class HeaderPanel : Panel {
+    public HeaderPanel(IScreenWriter screenWriter):base(screenWriter) {
       string header = @"                                                       
                                                        
                                                        

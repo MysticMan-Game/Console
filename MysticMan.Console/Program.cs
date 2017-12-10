@@ -7,7 +7,8 @@ namespace MysticMan.ConsoleApp{
       Console.CursorVisible = false;
 
       // Initialize the Screen
-      Screen screen = new Screen("MysticMan - Game"){
+      ConsoleScreenWriter consoleScreenWriter = new ConsoleScreenWriter();
+      Screen screen = new Screen("MysticMan - Game", consoleScreenWriter){
         InfoLineOne = "Press the following Keys to modify the counters",
         InfoLineTwo = "Moves: +/- (NumPad) | Level: l/L | Rounds: r/R"
       };
@@ -53,6 +54,13 @@ namespace MysticMan.ConsoleApp{
           case ConsoleKey.Subtract:
           case ConsoleKey.OemMinus:
             screen.Moves -= 1;
+            break;
+          case ConsoleKey.M:
+            screen.ShowMysticMan("A1");
+            screen.ShowMysticMan("B2");
+            screen.ShowMysticMan("C3");
+            screen.ShowMysticMan("D4");
+            screen.ShowMysticMan("E5");
             break;
           case ConsoleKey.Q:
             exitLoop = true;

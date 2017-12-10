@@ -42,17 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Field.cs" />
-    <Compile Include="GameField.cs" />
-    <Compile Include="Header.cs" />
-    <Compile Include="NumberField.cs" />
-    <Compile Include="Panel.cs" />
+    <Compile Include="ConsoleScreenWriter.cs" />
+    <Compile Include="Fields\Field.cs" />
+    <Compile Include="Fields\FieldBase.cs" />
+    <Compile Include="Panels\GamePanel.cs" />
+    <Compile Include="Panels\HeaderPanel.cs" />
+    <Compile Include="IScreenWriter.cs" />
+    <Compile Include="Fields\NumberField.cs" />
+    <Compile Include="Panels\Panel.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="Size.cs" />
-    <Compile Include="StringField.cs" />
+    <Compile Include="Fields\StringField.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,14 +1,23 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
-namespace MysticMan.ConsoleApp{
+namespace MysticMan.ConsoleApp.Panels{
   public class Panel {
+    private readonly IScreenWriter _screenWriter;
     private string _content;
+
+    protected Panel(IScreenWriter screenWriter) {
+      _screenWriter = screenWriter;
+    }
+
     public Position Position { get; set; }
     public Size Size { get; set; }
 
     public int Top => Position.Top;
     public int Bottom => Position.Top + Size.Height;
+
+    protected IScreenWriter ScreenWriter {
+      get { return _screenWriter; }
+    }
 
     public void SetContent(string content) {
       _content = content;
@@ -26,8 +35,7 @@ namespace MysticMan.ConsoleApp{
           if (i < contentBuffer.GetLength(0) && j < contentBuffer.GetLength(1)) {
             c = contentBuffer[i, j];
           }
-          Console.SetCursorPosition(Position.Left + i, Position.Top + j);
-          Console.Write(c);
+          ScreenWriter.Write(c, Position.Left + i, Position.Top + j);
         }
       }
     }

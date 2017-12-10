@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using MysticMan.ConsoleApp.Fields;
 
 namespace MysticMan.ConsoleApp {
   public class Screen {
+    private readonly IScreenWriter _screenWriter;
     private readonly List<FieldBase> _fields = new List<FieldBase>();
     private readonly NumberField _movesField;
     private readonly NumberField _roundField;
@@ -11,32 +14,34 @@ namespace MysticMan.ConsoleApp {
     private readonly NumberField _timerField;
     private readonly StringField _infoLineOneField;
     private readonly StringField _infoLineTwoField;
-    private readonly Header _header;
-    private readonly GameField _gameField;
+    private readonly HeaderPanel _headerPanel;
+    private readonly GamePanel _gamePanel;
 
-    public Screen(string title) {
-      Console.Title = title;
-      _header = new Header {
+    public Screen(string title, IScreenWriter screenWriter) {
+      _screenWriter = screenWriter;
+      _screenWriter.Title = title;
+
+      _headerPanel = new HeaderPanel(_screenWriter) {
         Position = new Position(0, 0),
         Size = new Size(55, 7)
       };
 
-      _gameField = new GameField {
-        Position = new Position(_header.Bottom + 1, 0),
+      _gamePanel = new GamePanel(_screenWriter) {
+        Position = new Position(0, _headerPanel.Bottom + 1),
         Size = new Size(55, 25)
       };
-      _movesField = CreateField<NumberField>(17, _header.Bottom + 23, 3);
-      _roundField = CreateField<NumberField>(45, _header.Bottom + 23, 3);
-      _levelField = CreateField<NumberField>(51, _header.Bottom + 23, 3);
-      _timerField = CreateField<NumberField>(17, _header.Bottom + 24, 3);
+      _movesField = CreateField<NumberField>(17, _headerPanel.Bottom + 23, 3);
+      _roundField = CreateField<NumberField>(45, _headerPanel.Bottom + 23, 3);
+      _levelField = CreateField<NumberField>(51, _headerPanel.Bottom + 23, 3);
+      _timerField = CreateField<NumberField>(17, _headerPanel.Bottom + 24, 3);
 
 
-      _infoLineOneField = CreateField<StringField>(2, _header.Top + 4, 50);
+      _infoLineOneField = CreateField<StringField>(2, _headerPanel.Top + 4, 50);
       _infoLineOneField.ForeGround = ConsoleColor.Green;
-      _infoLineTwoField = CreateField<StringField>(2, _header.Top + 5, 50);
+      _infoLineTwoField = CreateField<StringField>(2, _headerPanel.Top + 5, 50);
 
-      if (Console.WindowHeight < _gameField.Bottom + 5) {
-        Console.WindowHeight = _gameField.Bottom + 5;
+      if (Console.WindowHeight < _gamePanel.Bottom + 5) {
+        Console.WindowHeight = _gamePanel.Bottom + 5;
       }
     }
 
@@ -70,8 +75,7 @@ namespace MysticMan.ConsoleApp {
       set => _infoLineTwoField.Value = value;
     }
 
-    public int EndOfScreen  => _gameField.Bottom;
-    
+    public int EndOfScreen  => _gamePanel.Bottom;
 
     public void Draw() {
       PrintScreen();
@@ -82,19 +86,24 @@ namespace MysticMan.ConsoleApp {
 
     private TField CreateField<TField>(int x, int y, int length) where TField : FieldBase, new() {
       TField field = new TField {
-        PosX = x,
-        PosY = y,
+        Left = x,
+        Top = y,
         Length = length,
-        AutoDraw = true
+        AutoDraw = true,
+        ScreenWriter = _screenWriter
       };
       _fields.Add(field);
       return field;
     }
 
     private void PrintScreen() {
-      Console.Clear();
-      _header.Draw();
-      _gameField.Draw();
+      _screenWriter.Clear();
+      _headerPanel.Draw();
+      _gamePanel.Draw();
+    }
+
+    public void ShowMysticMan(string field) {
+      _gamePanel.ShowMysticMan(field);
     }
   }
 }

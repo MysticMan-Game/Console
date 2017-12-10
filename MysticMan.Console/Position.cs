@@ -1,6 +1,6 @@
 ﻿namespace MysticMan.ConsoleApp{
   public class Position {
-    public Position(int top, int left) {
+    public Position(int left, int top) {
       Top = top;
       Left = left;
     }
