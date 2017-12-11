@@ -1,7 +1,6 @@
 ﻿using System;
-using MysticMan.ConsoleApp.Fields;
 
-namespace MysticMan.ConsoleApp{
+namespace MysticMan.ConsoleApp.Fields{
   public class StringField : Field<string>{
     public ConsoleColor ForeGround{ get; set; }
 

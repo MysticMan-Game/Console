@@ -15,13 +15,14 @@ namespace MysticMan.ConsoleApp {
 
       Console.Clear();
       IScreenReader screenReader = new ConsoleScreenReader();
-      ConsoleScreenWriter screenWriter = new ConsoleScreenWriter();
+      IScreenWriter screenWriter = new ConsoleScreenWriter();
+      IScreenInfo screenInfo = new ConsoleScreenInfo();
 
-      _introScreen = new IntroScreen("MysticMan - Game", screenWriter, screenReader);
+      _introScreen = new IntroScreen("MysticMan - Game", screenWriter, screenReader, screenInfo);
       _introScreen.Run();
 
       // Initialize the MainScreen
-      _mainScreen = new MainScreen("MysticMan - Game", screenWriter) {
+      _mainScreen = new MainScreen("MysticMan - Game", screenWriter, screenInfo){
         InfoLineOne = "Press the following Keys to modify the counters",
         InfoLineTwo = "Moves: +/- (NumPad) | Level: l/L | Rounds: r/R",
         Level = _introScreen.Level
@@ -82,6 +83,9 @@ namespace MysticMan.ConsoleApp {
             _mainScreen.ShowMysticMan("C3");
             _mainScreen.ShowMysticMan("D4");
             _mainScreen.ShowMysticMan("E5");
+            _mainScreen.ShowMysticMan("F6");
+            _mainScreen.ShowMysticMan("G7");
+            _mainScreen.ShowMysticMan("H8");
             break;
           case ConsoleKey.Q:
             exitLoop = true;

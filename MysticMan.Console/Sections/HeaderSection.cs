@@ -1,8 +1,6 @@
-﻿using MysticMan.ConsoleApp.Panels;
-
-namespace MysticMan.ConsoleApp{
-  public class HeaderPanel : Panel {
-    public HeaderPanel(IScreenWriter screenWriter):base(screenWriter) {
+﻿namespace MysticMan.ConsoleApp.Sections{
+  public class HeaderSection : Section {
+    public HeaderSection(IScreenWriter screenWriter, IScreenInfo screenInfo):base(screenWriter, screenInfo) {
       string header = @"                                                       
                                                        
                                                        
