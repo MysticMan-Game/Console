@@ -5,7 +5,7 @@ using System.Linq;
 using MysticMan.ConsoleApp.Fields;
 
 namespace MysticMan.ConsoleApp {
-  public class Screen {
+  public class MainScreen {
     private readonly IScreenWriter _screenWriter;
     private readonly List<FieldBase> _fields = new List<FieldBase>();
     private readonly NumberField _movesField;
@@ -17,7 +17,7 @@ namespace MysticMan.ConsoleApp {
     private readonly HeaderPanel _headerPanel;
     private readonly GamePanel _gamePanel;
 
-    public Screen(string title, IScreenWriter screenWriter) {
+    public MainScreen(string title, IScreenWriter screenWriter) {
       _screenWriter = screenWriter;
       _screenWriter.Title = title;
 
@@ -77,11 +77,12 @@ namespace MysticMan.ConsoleApp {
 
     public int EndOfScreen  => _gamePanel.Bottom;
 
-    public void Draw() {
+    public void Run(Action inputLoop) {
       PrintScreen();
       foreach (FieldBase field in _fields) {
         field.Draw();
       }
+      inputLoop();
     }
 
     private TField CreateField<TField>(int x, int y, int length) where TField : FieldBase, new() {

@@ -9,8 +9,17 @@ namespace MysticMan.ConsoleApp{
       ForeGround = Console.ForegroundColor;
     }
 
-    public override void Draw(){
-      string value = Value?.Substring(0, Math.Min(Value.Length, Length));
+    public override void Draw() {
+      string value01 = GetValue();
+      string value = value01?.Substring(0, Math.Min(value01.Length, Length));
+      Write(value);
+    }
+
+    protected virtual string GetValue() {
+      return Value;
+    }
+
+    protected virtual void Write(string value){
       ScreenWriter.Write(value, Left, Top, ForeGround);
     }
   }

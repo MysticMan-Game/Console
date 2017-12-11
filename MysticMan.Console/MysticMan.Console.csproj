@@ -42,9 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleScreenReader.cs" />
     <Compile Include="ConsoleScreenWriter.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\FieldBase.cs" />
+    <Compile Include="Fields\InputField.cs" />
+    <Compile Include="Fields\InputFieldBase.cs" />
+    <Compile Include="Fields\IntInputField.cs" />
+    <Compile Include="Fields\NumberRangeInputField.cs" />
+    <Compile Include="Fields\StringInputField.cs" />
+    <Compile Include="IntroScreen.cs" />
+    <Compile Include="IScreenReader.cs" />
     <Compile Include="Panels\GamePanel.cs" />
     <Compile Include="Panels\HeaderPanel.cs" />
     <Compile Include="IScreenWriter.cs" />
@@ -53,7 +61,7 @@
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screen.cs" />
+    <Compile Include="MainScreen.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Fields\StringField.cs" />
   </ItemGroup>
