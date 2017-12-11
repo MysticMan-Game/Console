@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Timers;
 
 namespace MysticMan.ConsoleApp {
@@ -78,14 +79,34 @@ namespace MysticMan.ConsoleApp {
             _mainScreen.Moves -= 1;
             break;
           case ConsoleKey.M:
-            _mainScreen.ShowMysticMan("A1");
-            _mainScreen.ShowMysticMan("B2");
-            _mainScreen.ShowMysticMan("C3");
-            _mainScreen.ShowMysticMan("D4");
-            _mainScreen.ShowMysticMan("E5");
-            _mainScreen.ShowMysticMan("F6");
-            _mainScreen.ShowMysticMan("G7");
-            _mainScreen.ShowMysticMan("H8");
+            for (int i = 0; i < Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) ; i++ ) {
+              _mainScreen.ShowMysticMan($"{(char)(65 +i)}{i +1}");
+            }
+
+            int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
+            for (int i = min - 1; i >=0; i--) {
+              _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
+            }
+            break;
+          case ConsoleKey.D1:
+            if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
+              _mainScreen.SetGameSection(GameSection.Small);
+            }
+            break;
+          case ConsoleKey.D2:
+            if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
+              _mainScreen.SetGameSection(GameSection.Medium);
+            }
+            break;
+          case ConsoleKey.D3:
+            if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
+              _mainScreen.SetGameSection(GameSection.Large);
+            }
+            break;
+          case ConsoleKey.D4:
+            if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
+              _mainScreen.SetGameSection(GameSection.XLarge);
+            }
             break;
           case ConsoleKey.Q:
             exitLoop = true;

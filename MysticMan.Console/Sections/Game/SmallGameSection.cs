@@ -40,32 +40,27 @@ namespace MysticMan.ConsoleApp.Sections.Game {
       TimerField = CreateField<NumberField>(17, Top + 23, 3);
     }
 
-    protected override IDictionary<string, Position> CellPositions => new Dictionary<string, Position> {
-      {"A1", new Position(9, 3)},
-      {"B1", new Position(19, 3)},
-      {"C1", new Position(29, 3)},
-      {"D1", new Position(39, 3)},
-      {"E1", new Position(49, 3)},
-      {"A2", new Position(9, 7)},
-      {"B2", new Position(19, 7)},
-      {"C2", new Position(29, 7)},
-      {"D2", new Position(39, 7)},
-      {"E2", new Position(49, 7)},
-      {"A3", new Position(9, 11)},
-      {"B3", new Position(19, 11)},
-      {"C3", new Position(29, 11)},
-      {"D3", new Position(39, 11)},
-      {"E3", new Position(49, 11)},
-      {"A4", new Position(9, 15)},
-      {"B4", new Position(19, 15)},
-      {"C4", new Position(29, 15)},
-      {"D4", new Position(39, 15)},
-      {"E4", new Position(49, 15)},
-      {"A5", new Position(9, 19)},
-      {"B5", new Position(19, 19)},
-      {"C5", new Position(29, 19)},
-      {"D5", new Position(39, 19)},
-      {"E5", new Position(49, 19)}
-    };
+
+    public override int XCounter => 5;
+    public override int YCounter => 5;
+
+    protected override IDictionary<string, Position> CellPositions {
+      get {
+        Dictionary<string, Position> cells = new Dictionary<string, Position>();
+        int xOffset = 9;
+        int xDistance = 10;
+        int yOffset = 3;
+        int yDistance = 4;
+
+        for (int left = 0; left < XCounter; ++left) {
+          for (int top = 0; top < YCounter; ++top) {
+            string key = $"{(char)(65 + left)}{top + 1}";
+            cells.Add(key, new Position(xOffset + left * xDistance, yOffset + top * yDistance));
+          }
+        }
+        return cells;
+      }
+    }
+   
   }
 }

@@ -13,5 +13,8 @@ namespace MysticMan.ConsoleApp{
       get => Console.WindowHeight;
       set => Console.WindowHeight = value;
     }
+
+    /// <inheritdoc />
+    public Position CursorPosition => new Position(Console.CursorLeft, Console.CursorTop);
   }
 }

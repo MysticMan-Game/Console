@@ -16,7 +16,7 @@ namespace MysticMan.ConsoleApp.Sections.Intro {
     /// <inheritdoc />
     protected override void OnInitialize() {
       base.OnInitialize();
-      _playerNameInputField = new StringInputField(_screenReader) {
+      _playerNameInputField = new StringInputField(_screenReader, ScreenInfo) {
         AutoDraw = false,
         Left = 3,
         Top = 3,
@@ -25,7 +25,7 @@ namespace MysticMan.ConsoleApp.Sections.Intro {
         ForeGround = Console.ForegroundColor,
         Value = "Please enter your name:"
       };
-      _levelInputField = new NumberRangeInputField(_screenReader) {
+      _levelInputField = new NumberRangeInputField(_screenReader, ScreenInfo) {
         AutoDraw = false,
         Left = 3,
         Top = 4,

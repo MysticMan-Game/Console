@@ -32,6 +32,8 @@ namespace MysticMan.ConsoleApp.Sections.Game{
     }
 
     protected abstract IDictionary<string, Position> CellPositions { get; }
+    public abstract int XCounter{ get; }
+    public abstract int YCounter{ get; }
 
     public void ShowMysticMan(string field) {
       if (CellPositions.ContainsKey(field)) {

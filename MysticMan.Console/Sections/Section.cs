@@ -55,16 +55,7 @@ namespace MysticMan.ConsoleApp.Sections {
       char[,] contentBuffer = CreateStringBuffer(_content);
       char[,] buffer = new char[Size.Width, Size.Height];
 
-      // Output buffer
-      for (int i = 0; i < buffer.GetLength(0); i++) {
-        for (int j = 0; j < buffer.GetLength(1); j++) {
-          char c = buffer[i, j];
-          if (i < contentBuffer.GetLength(0) && j < contentBuffer.GetLength(1)) {
-            c = contentBuffer[i, j];
-          }
-          ScreenWriter.Write(c, Position.Left + i, Position.Top + j);
-        }
-      }
+      WriteBuffer(buffer, contentBuffer);
 
       foreach (FieldBase field in _fields.OrderBy(f => f.Top)) {
         Type fieldtype = field.GetType();
@@ -73,6 +64,19 @@ namespace MysticMan.ConsoleApp.Sections {
         }
         else {
           field.Draw();
+        }
+      }
+    }
+
+    private void WriteBuffer(char[,] buffer, char[,] contentBuffer){
+// Output buffer
+      for (int i = 0; i < buffer.GetLength(0); i++){
+        for (int j = 0; j < buffer.GetLength(1); j++){
+          char c = buffer[i, j];
+          if (i < contentBuffer.GetLength(0) && j < contentBuffer.GetLength(1)){
+            c = contentBuffer[i, j];
+          }
+          ScreenWriter.Write(c, Position.Left + i, Position.Top + j);
         }
       }
     }
@@ -123,5 +127,14 @@ namespace MysticMan.ConsoleApp.Sections {
     public void AddField(FieldBase field) {
       _fields.Add(field);
     }
+
+    public void Clear() {
+      char[,] buffer = new char[Size.Width, Size.Height];
+      foreach (FieldBase field in _fields.OrderBy(f => f.Top)) {
+        field.AutoDraw = false;
+      }
+      WriteBuffer(buffer, buffer);
+    }
+
   }
 }

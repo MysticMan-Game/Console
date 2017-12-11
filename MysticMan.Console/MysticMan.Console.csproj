@@ -53,6 +53,8 @@
     <Compile Include="Fields\NumberRangeInputField.cs" />
     <Compile Include="Fields\StringInputField.cs" />
     <Compile Include="Sections\Game\GameHeaderSection.cs" />
+    <Compile Include="Sections\Game\LargeGameSection.cs" />
+    <Compile Include="Sections\Game\XtraLargeGameSection.cs" />
     <Compile Include="Sections\Intro\IntroHeaderSection.cs" />
     <Compile Include="IntroScreen.cs" />
     <Compile Include="IScreenReader.cs" />

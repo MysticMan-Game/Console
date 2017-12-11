@@ -3,5 +3,6 @@
 
     string ReadLine();
 
+    string ReadLine(Position position);
   }
 }

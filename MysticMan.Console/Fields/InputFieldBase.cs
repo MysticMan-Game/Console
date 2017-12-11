@@ -3,7 +3,10 @@ using System.Linq;
 
 namespace MysticMan.ConsoleApp.Fields{
   internal abstract class InputFieldBase : StringField {
-    protected InputFieldBase(IScreenReader screenReader) {
+    private readonly IScreenInfo _screenInfo;
+
+    protected InputFieldBase(IScreenReader screenReader, IScreenInfo screenInfo) {
+      _screenInfo = screenInfo;
       ScreenReader = screenReader;
     }
 
@@ -15,13 +18,7 @@ namespace MysticMan.ConsoleApp.Fields{
 
       do {
         Draw();
-        Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-        bool cursorIsVisisble = Console.CursorVisible;
-        Console.CursorVisible = true;
-        string input = ScreenReader.ReadLine();
-        if (!cursorIsVisisble) {
-          Console.CursorVisible = false;
-        }
+        string input = ScreenReader.ReadLine(_screenInfo.CursorPosition);
 
         try {
           SetInput(input);

@@ -1,29 +1,22 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using MysticMan.ConsoleApp.Sections.Game;
 
 namespace MysticMan.ConsoleApp {
   public class MainScreen {
     private readonly IScreenWriter _screenWriter;
+    private readonly IScreenInfo _screenInfo;
     private readonly GameHeaderSection _headerSection;
-    private readonly GameSectionBase _gameSection;
+    private GameSectionBase _gameSection;
 
     public MainScreen(string title, IScreenWriter screenWriter, IScreenInfo screenInfo) {
       _screenWriter = screenWriter;
+      _screenInfo = screenInfo;
       _screenWriter.Title = title;
 
       _headerSection = new GameHeaderSection(_screenWriter, screenInfo);
       _headerSection.Initialize();
 
-      _gameSection = new MediumGameSection(_screenWriter, screenInfo) {
-        Top = _headerSection.Bottom + 1
-      };
-      _gameSection.Initialize();
-
-      if (Console.WindowHeight < _gameSection.Bottom + 5) {
-        Console.WindowHeight = _gameSection.Bottom + 5;
-      }
+      SetGameSection(GameSection.Small);
     }
 
     public int Moves {
@@ -56,11 +49,38 @@ namespace MysticMan.ConsoleApp {
       set => _headerSection.InfoLineTwo = value;
     }
 
-    public int EndOfScreen  => _gameSection.Bottom;
+    public int EndOfScreen => _gameSection.Bottom;
 
     public void Run(Action inputLoop) {
       PrintScreen();
       inputLoop();
+    }
+
+    public void SetGameSection(GameSection gameSection) {
+      _gameSection?.Clear();
+
+      switch (gameSection) {
+        case GameSection.Small:
+          _gameSection = new SmallGameSection(_screenWriter, _screenInfo);
+          break;
+        case GameSection.Medium:
+          _gameSection = new MediumGameSection(_screenWriter, _screenInfo);
+          break;
+        case GameSection.Large:
+          _gameSection = new LargeGameSection(_screenWriter, _screenInfo);
+          break;
+        case GameSection.XLarge:
+          _gameSection = new XtraLargeGameSection(_screenWriter, _screenInfo);
+          break;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(gameSection), gameSection, null);
+      }
+      _gameSection.Top = _headerSection.Bottom + 1;
+      _gameSection.Initialize();
+      _gameSection.Draw();
+      if (Console.WindowHeight < _gameSection.Bottom + 5) {
+        Console.WindowHeight = _gameSection.Bottom + 5;
+      }
     }
 
     private void PrintScreen() {
@@ -72,5 +92,15 @@ namespace MysticMan.ConsoleApp {
     public void ShowMysticMan(string field) {
       _gameSection.ShowMysticMan(field);
     }
+
+    public int MaxXCells => _gameSection.XCounter;
+    public int MaxYCells => _gameSection.YCounter;
+  }
+
+  public enum GameSection {
+    Small,
+    Medium,
+    Large,
+    XLarge
   }
 }

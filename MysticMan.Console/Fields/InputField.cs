@@ -2,7 +2,7 @@
 
 namespace MysticMan.ConsoleApp.Fields{
   internal abstract class InputField<TInput> : InputFieldBase {
-    protected InputField(IScreenReader screenReader):base(screenReader) {
+    protected InputField(IScreenReader screenReader, IScreenInfo screenInfo):base(screenReader, screenInfo) {
       
     }
 
