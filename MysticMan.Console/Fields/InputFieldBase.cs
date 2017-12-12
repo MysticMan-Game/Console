@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace MysticMan.ConsoleApp.Fields{
-  internal abstract class InputFieldBase : StringField {
+  public abstract class InputFieldBase : StringField {
     private readonly IScreenInfo _screenInfo;
 
     protected InputFieldBase(IScreenReader screenReader, IScreenInfo screenInfo) {
@@ -18,7 +18,7 @@ namespace MysticMan.ConsoleApp.Fields{
 
       do {
         Draw();
-        string input = ScreenReader.ReadLine(_screenInfo.CursorPosition);
+        string input = ScreenReader.ReadLine(new Position(Left + (GetValue()?.Length ?? 0) + 1, Top));
 
         try {
           SetInput(input);

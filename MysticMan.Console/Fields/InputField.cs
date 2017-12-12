@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace MysticMan.ConsoleApp.Fields{
-  internal abstract class InputField<TInput> : InputFieldBase {
+  public abstract class InputField<TInput> : InputFieldBase {
     protected InputField(IScreenReader screenReader, IScreenInfo screenInfo):base(screenReader, screenInfo) {
       
     }

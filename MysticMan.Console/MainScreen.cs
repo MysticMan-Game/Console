@@ -7,10 +7,12 @@ namespace MysticMan.ConsoleApp {
     private readonly IScreenInfo _screenInfo;
     private readonly GameHeaderSection _headerSection;
     private GameSectionBase _gameSection;
+    private readonly IScreenReader _screenReader;
 
-    public MainScreen(string title, IScreenWriter screenWriter, IScreenInfo screenInfo) {
+    public MainScreen(string title, IScreenWriter screenWriter, IScreenInfo screenInfo, IScreenReader screenReader) {
       _screenWriter = screenWriter;
       _screenInfo = screenInfo;
+      _screenReader = screenReader;
       _screenWriter.Title = title;
 
       _headerSection = new GameHeaderSection(_screenWriter, screenInfo);
@@ -61,16 +63,16 @@ namespace MysticMan.ConsoleApp {
 
       switch (gameSection) {
         case GameSection.Small:
-          _gameSection = new SmallGameSection(_screenWriter, _screenInfo);
+          _gameSection = new SmallGameSection(_screenWriter, _screenInfo, _screenReader);
           break;
         case GameSection.Medium:
-          _gameSection = new MediumGameSection(_screenWriter, _screenInfo);
+          _gameSection = new MediumGameSection(_screenWriter, _screenInfo, _screenReader);
           break;
         case GameSection.Large:
-          _gameSection = new LargeGameSection(_screenWriter, _screenInfo);
+          _gameSection = new LargeGameSection(_screenWriter, _screenInfo, _screenReader);
           break;
         case GameSection.XLarge:
-          _gameSection = new XtraLargeGameSection(_screenWriter, _screenInfo);
+          _gameSection = new XtraLargeGameSection(_screenWriter, _screenInfo, _screenReader);
           break;
         default:
           throw new ArgumentOutOfRangeException(nameof(gameSection), gameSection, null);
@@ -95,6 +97,19 @@ namespace MysticMan.ConsoleApp {
 
     public int MaxXCells => _gameSection.XCounter;
     public int MaxYCells => _gameSection.YCounter;
+
+    public string AskForSolution() {
+      string solution = _gameSection.GetSolution();
+      return solution;
+    }
+
+    public void ShowPressSpaceToStart() {
+      _gameSection.PressEnterScreen();
+    }
+
+    public void RefreshGameSection() {
+      _gameSection.Draw();
+    }
   }
 
   public enum GameSection {

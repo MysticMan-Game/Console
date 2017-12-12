@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MysticMan.ConsoleApp.Fields;
 
 namespace MysticMan.ConsoleApp.Sections.Game{
   public class LargeGameSection : GameSectionBase {
-    public LargeGameSection(IScreenWriter screenWriter, IScreenInfo screenInfo) : base(screenWriter, screenInfo) {
+    public LargeGameSection(IScreenWriter screenWriter, IScreenInfo screenInfo, IScreenReader screenReader) : base(screenWriter, screenInfo, screenReader) {
     }
 
     /// <inheritdoc />
@@ -59,6 +60,14 @@ namespace MysticMan.ConsoleApp.Sections.Game{
       RoundField = CreateField<NumberField>(55, Top + 42, 3);
       LevelField = CreateField<NumberField>(61, Top + 42, 3);
       TimerField = CreateField<NumberField>(17, Top + 43, 3);
+      SolutionInputField = new StringInputField(ScreenReader, ScreenInfo) {
+        Left = 5,
+        Top = Top + 44,
+        Length = ScreenInfo.Width,
+        ScreenWriter = ScreenWriter,
+        Value = "Please enter your expected solution (e.g. \"A1\"):",
+        ForeGround = ConsoleColor.Yellow
+      };
     }
 
 

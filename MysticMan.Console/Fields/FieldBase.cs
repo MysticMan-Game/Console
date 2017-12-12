@@ -6,5 +6,7 @@
     public bool AutoDraw{ get; set; }
     public  IScreenWriter ScreenWriter { get; set; }
     public abstract void Draw();
+
+    public abstract void Clear();
   }
 }

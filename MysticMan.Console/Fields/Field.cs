@@ -11,5 +11,10 @@
         }
       }
     }
+
+    /// <inheritdoc />
+    public override void Clear() {
+      throw new System.NotImplementedException();
+    }
   }
 }

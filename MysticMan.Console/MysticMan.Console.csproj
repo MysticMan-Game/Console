@@ -45,6 +45,9 @@
     <Compile Include="ConsoleScreenInfo.cs" />
     <Compile Include="ConsoleScreenReader.cs" />
     <Compile Include="ConsoleScreenWriter.cs" />
+    <Compile Include="Engine\GameEngineState.cs" />
+    <Compile Include="Engine\IGameEngine.cs" />
+    <Compile Include="Engine\TestEngine.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\FieldBase.cs" />
     <Compile Include="Fields\InputField.cs" />
