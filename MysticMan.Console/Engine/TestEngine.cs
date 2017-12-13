@@ -89,7 +89,12 @@ namespace MysticMan.ConsoleApp.Engine {
 
     /// <inheritdoc />
     public void Resolve(string solution) {
-      UpdateState();
+      if (solution == "zz") {
+        State = GameEngineState.GameWon;
+      }
+      else {
+        State = GameEngineState.GameLost;
+      }
     }
 
     private void UpdateState() {
@@ -110,16 +115,15 @@ namespace MysticMan.ConsoleApp.Engine {
           }
           else {
             MovesLeft--;
-          }
-          if (State == GameEngineState.WaitingForMove) {
-            State = MovesLeft > 0 ? GameEngineState.WaitingForMove : GameEngineState.WaitingForResolving;
+            if (State == GameEngineState.WaitingForMove) {
+              State = MovesLeft > 0 ? GameEngineState.WaitingForMove : GameEngineState.WaitingForResolving;
+            }
           }
           break;
         case GameEngineState.WaitingForResolving:
           State = GameEngineState.WaitingForNextRound;
           break;
         case GameEngineState.GameLost:
-          break;
         case GameEngineState.GameWon:
           if (RoundsLeft) {
             State = GameEngineState.WaitingForNextRound;
