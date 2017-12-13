@@ -18,6 +18,5 @@ namespace MysticMan.ConsoleApp.Engine{
     event EventHandler WallReached;
     void StartNextRound();
     void PrepareNextRound();
-    //Test
   }
 }
