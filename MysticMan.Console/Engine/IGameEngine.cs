@@ -10,9 +10,14 @@ namespace MysticMan.ConsoleApp.Engine{
     void MoveRight();
     GameEngineState State { get;}
     int MovesLeft { get; }
+    bool NextRoundAvailable { get; }
+    int Level { get; }
+    int Round { get; }
     void Start();
     void Resolve(string solution);
     event EventHandler WallReached;
+    void StartNextRound();
+    void PrepareNextRound();
     //Test
   }
 }

@@ -3,7 +3,10 @@
 
     Initialized,
     WaitingForMove,
-    WaitingForResolving
-
+    WaitingForResolving,
+    GameLost,
+    GameWon,
+    WaitingForNextRound,
+    WaitingForNextLevel
   }
 }

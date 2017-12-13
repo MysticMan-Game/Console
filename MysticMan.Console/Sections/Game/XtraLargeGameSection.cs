@@ -58,6 +58,14 @@ namespace MysticMan.ConsoleApp.Sections.Game{
         Value = "Please enter your expected solution (e.g. \"A1\"):",
         ForeGround = ConsoleColor.Yellow
       };
+      PlayAgainField = new BooleanInputField(ScreenReader, ScreenInfo) {
+        Left = 5,
+        Top = Top + 34,
+        Length = ScreenInfo.Width,
+        ScreenWriter = ScreenWriter,
+        Value = "Want to play again? (Y/N):",
+        ForeGround = ConsoleColor.Yellow
+      };
     }
 
     public override int XCounter => 15;

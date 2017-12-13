@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using MysticMan.ConsoleApp.Extensions;
 using MysticMan.ConsoleApp.Fields;
 
-namespace MysticMan.ConsoleApp.Sections.Game{
+namespace MysticMan.ConsoleApp.Sections.Game {
   public abstract class GameSectionBase : Section {
+    protected GameSectionBase(IScreenWriter screenWriter, IScreenInfo screenInfo, IScreenReader screenReader) : base(screenWriter, screenInfo) {
+      ScreenReader = screenReader;
+    }
+
     protected NumberField MovesField { get; set; }
     protected NumberField RoundField { get; set; }
     protected NumberField LevelField { get; set; }
     protected NumberField TimerField { get; set; }
-    
-    protected StringInputField SolutionInputField{get; set; }
 
-    protected GameSectionBase(IScreenWriter screenWriter, IScreenInfo screenInfo, IScreenReader screenReader) : base(screenWriter, screenInfo) {
-      ScreenReader = screenReader;
-    }
+    protected StringInputField SolutionInputField { get; set; }
+
+    protected BooleanInputField PlayAgainField { get; set; }
 
     public int Moves {
       get => MovesField.Value;
@@ -37,8 +39,8 @@ namespace MysticMan.ConsoleApp.Sections.Game{
     }
 
     protected abstract IDictionary<string, Position> CellPositions { get; }
-    public abstract int XCounter{ get; }
-    public abstract int YCounter{ get; }
+    public abstract int XCounter { get; }
+    public abstract int YCounter { get; }
     public IScreenReader ScreenReader { get; set; }
 
     public void ShowMysticMan(string field) {
@@ -55,10 +57,8 @@ namespace MysticMan.ConsoleApp.Sections.Game{
       return solution;
     }
 
-
     public void PressEnterScreen() {
       // http://patorjk.com/software/taag/#p=testall&v=2&f=Small%20Slant&t=PRESS%20SPACE
-
 
       string value = @"
    ___  ___  ____________  _______  ___  _________
@@ -72,42 +72,48 @@ namespace MysticMan.ConsoleApp.Sections.Game{
     /_/  \____/ /___/ /_/ /_/ |_/_/|_| /_/    
 ";
 
-      value = value.Substring(2, value.Length-4);
+      Notify(value);
+    }
+
+    private void Notify(string value) {
+      value = value.Substring(2, value.Length - 4);
       int valueHeight = value.Split('\n').Length;
-      
+
       char[,] stringBuffer = CreateStringBuffer(value);
       char[,] buffer = GetContentBuffer();
-      int left =  (buffer.GetLength(0) / 2) - (stringBuffer.GetLength(0) / 2);
-      left = Math.Max(3, left);
+      int left = buffer.GetLength(0) / 2 - stringBuffer.GetLength(0) / 2;
+      left = Math.Max(4, left);
       buffer = buffer.Stretch(Console.BufferWidth, buffer.GetLength(1));
-      stringBuffer.CopyTo(buffer, left, (buffer.GetLength(1) - valueHeight)/2);
+      stringBuffer.CopyTo(buffer, left, (buffer.GetLength(1) - valueHeight) / 2);
       WriteBuffer(buffer);
     }
-  }
 
+    public void WinningScreen() {
+      string value = @"
+  ________   __  _______  _      ______  _  __
+ / ___/ _ | /  |/  / __/ | | /| / / __ \/ |/ /
+/ (_ / __ |/ /|_/ / _/   | |/ |/ / /_/ /    / 
+\___/_/ |_/_/  /_/___/   |__/|__/\____/_/|_/  
+";
 
-  public static class CharBufferExtensions {
-
-    public static void CopyTo(this char[,] source, char[,] target, int left, int top) {
-
-      for (int i = 0; i < source.GetLength(0); i++) {
-        for (int j = 0; j < source.GetLength(1); j++) {
-          if (left + i < target.GetLength(0) && top + j < target.GetLength(1)) {
-            target[left + i, top + j] = source[i, j];
-          }
-        }
-      }
+      Notify(value);
     }
 
-    public static char[,] Stretch(this char[,] source, int width, int height) {
-      int newWidth = Math.Max(source.GetLength(0), width);
-      int newHeight = Math.Max(source.GetLength(1), height);
-      char[,] buffer = new char[newWidth,newHeight];
-      source.CopyTo(buffer, 0, 0);
-      return buffer;
+    public void LostScreen() {
+      string value = @"
+   ________   __  _______  __   ____  __________
+ / ___/ _ | /  |/  / __/ / /  / __ \/ __/_  __/
+/ (_ / __ |/ /|_/ / _/  / /__/ /_/ /\ \  / /   
+\___/_/ |_/_/  /_/___/ /____/\____/___/ /_/      
+";
+
+      Notify(value);
+    }
+
+    public bool PlayAgain() {
+      PlayAgainField.Read();
+      PlayAgainField.Clear();
+      return PlayAgainField.Input;
     }
   }
-
 }
-
-

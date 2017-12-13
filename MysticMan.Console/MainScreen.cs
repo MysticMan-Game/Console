@@ -110,6 +110,18 @@ namespace MysticMan.ConsoleApp {
     public void RefreshGameSection() {
       _gameSection.Draw();
     }
+
+    public void ShowLostScreen() {
+      _gameSection.LostScreen();
+    }
+
+    public bool AskPlayAgain() {
+      return _gameSection.PlayAgain();
+    }
+
+    public void ShowWinningScreen() {
+      _gameSection.WinningScreen();
+    }
   }
 
   public enum GameSection {

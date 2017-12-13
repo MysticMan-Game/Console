@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Timers;
 using MysticMan.ConsoleApp.Engine;
 
 namespace MysticMan.ConsoleApp {
@@ -7,14 +6,16 @@ namespace MysticMan.ConsoleApp {
     private IntroScreen _introScreen;
     private MainScreen _mainScreen;
     private IGameEngine _engine;
+    private bool _exitLoop;
 
     private static void Main() {
       new Program().Run();
     }
 
     private void Run() {
-      Console.CursorVisible = false;
+      Console.CancelKeyPress += Console_CancelKeyPress;
 
+      Console.CursorVisible = false;
       Console.Clear();
       IScreenReader screenReader = new ConsoleScreenReader();
       IScreenWriter screenWriter = new ConsoleScreenWriter();
@@ -33,17 +34,11 @@ namespace MysticMan.ConsoleApp {
       if (_introScreen.Level > 1) {
         _engine = new TestEngine();
         _engine.Initialize();
+        _engine.WallReached += (sender, args) => WallSound();
       }
-
-      // Initialize a timer 
-      Timer timer = new Timer(1000);
-      timer.Elapsed += (sender, eventArgs) => { _mainScreen.Timer += 1; };
-      // timer.Start();
 
       // Run the static mainScreen
       _mainScreen.Run(InputLoop);
-
-      timer.Stop();
 
       Console.SetCursorPosition(0, _mainScreen.EndOfScreen + 2);
       Console.WriteLine("GAME OVER - Press ENTER to Quit");
@@ -51,10 +46,9 @@ namespace MysticMan.ConsoleApp {
 
     private void InputLoop() {
       // Enter the input loop
-      _engine.WallReached += (sender, args) => WallSound();
+      _exitLoop = false;
 
-      Console.TreatControlCAsInput = true;
-      bool exitLoop = false;
+
       do {
         if (null != _engine) {
           switch (_engine.State) {
@@ -65,10 +59,10 @@ namespace MysticMan.ConsoleApp {
               ConsoleKeyInfo input = Console.ReadKey(true);
               switch (input.Key) {
                 case ConsoleKey.Spacebar: {
-                  _mainScreen.RefreshGameSection();
-                  _engine.Start();
-                  break;
-                }
+                    _mainScreen.RefreshGameSection();
+                    _engine.Start();
+                    break;
+                  }
               }
               break;
             case GameEngineState.WaitingForMove:
@@ -95,12 +89,39 @@ namespace MysticMan.ConsoleApp {
               _engine.Resolve(solution);
 
               break;
+            case GameEngineState.WaitingForNextLevel:
+            case GameEngineState.WaitingForNextRound:
+              _mainScreen.RefreshGameSection();
+              _engine.StartNextRound();
+              break;
+            case GameEngineState.GameLost:
+              _mainScreen.ShowLostScreen();
+              if (_mainScreen.AskPlayAgain()) {
+                _engine.PrepareNextRound();
+              }
+              else {
+                _exitLoop = true;
+              }
+              break;
+            case GameEngineState.GameWon:
+              _mainScreen.ShowWinningScreen();
+              if (_engine.NextRoundAvailable) {
+                if (_mainScreen.AskPlayAgain()) {
+                  _engine.PrepareNextRound();
+                }
+                else {
+                  _exitLoop = true;
+                }
+              }
+              break;
             default:
               throw new ArgumentOutOfRangeException();
           }
 
           // TODO: update the mainscreen from engine status
           _mainScreen.Moves = _engine.MovesLeft;
+          _mainScreen.Level = _engine.Level;
+          _mainScreen.Rounds = _engine.Round;
         }
         else {
           ConsoleKeyInfo input = Console.ReadKey(true);
@@ -133,14 +154,16 @@ namespace MysticMan.ConsoleApp {
             case ConsoleKey.OemMinus:
               _mainScreen.Moves -= 1;
               break;
-            case ConsoleKey.M:
-              for (int i = 0; i < Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells); i++)
-                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{i + 1}");
+            case ConsoleKey.M: {
+                for (int i = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) - 1; i >= 0; i--)
+                  _mainScreen.ShowMysticMan($"{(char)(65 + i)}{i + 1}");
 
-              int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
-              for (int i = min - 1; i >= 0; i--)
-                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
-              break;
+                int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
+                for (int i = min - 1; i >= 0; i--)
+                  _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
+
+                break;
+              }
             case ConsoleKey.D1:
               if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
                 _mainScreen.SetGameSection(GameSection.Small);
@@ -162,14 +185,19 @@ namespace MysticMan.ConsoleApp {
               }
               break;
             case ConsoleKey.Q:
-              exitLoop = true;
+              _exitLoop = true;
               break;
             case ConsoleKey.C:
-              exitLoop = (input.Modifiers & ConsoleModifiers.Control) != 0;
+              _exitLoop = (input.Modifiers & ConsoleModifiers.Control) != 0;
               break;
           }
         }
-      } while (!exitLoop);
+      } while (!_exitLoop);
+    }
+
+    private void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e) {
+      _exitLoop = true;
+      e.Cancel = false;
     }
 
     private static void WallSound() {
@@ -180,8 +208,5 @@ namespace MysticMan.ConsoleApp {
       }
       Console.Beep(440, 600);
     }
-  }
-
-  public class SolutionResult {
   }
 }

@@ -12,6 +12,10 @@ namespace MysticMan.ConsoleApp.Fields{
 
     private IScreenReader ScreenReader { get; }
 
+    public IScreenInfo ScreenInfo {
+      get { return _screenInfo; }
+    }
+
     public void Read() {
       bool isValid = false;
 
