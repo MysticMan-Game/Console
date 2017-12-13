@@ -4,14 +4,14 @@ namespace MysticMan.ConsoleApp{
   internal class ConsoleScreenInfo : IScreenInfo {
     /// <inheritdoc />
     public int Width {
-      get => Console.WindowWidth;
-      set => Console.WindowWidth = value;
+      get => Console.WindowWidth -1;
+      set => Console.WindowWidth = value +1;
     }
 
     /// <inheritdoc />
     public int Height {
-      get => Console.WindowHeight;
-      set => Console.WindowHeight = value;
+      get => Console.WindowHeight -1 ;
+      set => Console.WindowHeight = value +1 ;
     }
 
     /// <inheritdoc />

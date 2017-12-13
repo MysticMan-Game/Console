@@ -31,10 +31,13 @@ namespace MysticMan.ConsoleApp.Sections.Game {
     ║         │         │         │         │         ║ 
    5║         │         │         │         │         ║ 
     ║         │         │         │         │         ║ 
-   ═╚═════════╧═════════╧═════════╧═════════╧═════════╝ 
-     Moves left:   1          Round / Level: 002 / 001  
+   ═╚═════════╧═════════╧═════════╧═════════╧═════════╝";
+
+      string stats = @"     Moves left:   1          Round / Level: 002 / 001  
      Move timer:  10 sec";
+
       SetContent(content);
+      SetStats(stats);
       MovesField = CreateField<NumberField>(17, Top + 22, 3);
       RoundField = CreateField<NumberField>(45, Top + 22, 3);
       LevelField = CreateField<NumberField>(51, Top + 22, 3);
@@ -56,7 +59,6 @@ namespace MysticMan.ConsoleApp.Sections.Game {
         ForeGround = ConsoleColor.Yellow
       };
     }
-
 
     public override int XCounter => 5;
     public override int YCounter => 5;

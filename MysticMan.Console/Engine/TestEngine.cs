@@ -20,7 +20,7 @@ namespace MysticMan.ConsoleApp.Engine {
         Round++;
       }
       else if (State == GameEngineState.WaitingForNextLevel) {
-        Round = 0;
+        Round = 1;
         Level++;
       }
       UpdateState();
@@ -81,8 +81,8 @@ namespace MysticMan.ConsoleApp.Engine {
       _maxMoveCounter = MovesLeft = 5;
       _maxRoundsCounter = 3;
       _maxLevelsCounter = 2;
-      Level = 0;
-      Round = 0;
+      Level = 1;
+      Round = 1;
 
       UpdateState();
     }
@@ -124,12 +124,21 @@ namespace MysticMan.ConsoleApp.Engine {
           State = GameEngineState.WaitingForNextRound;
           break;
         case GameEngineState.GameLost:
+          // If the player is here then he decided to repeate his last round
+          _moveState.Clear();
+          MovesLeft = _maxMoveCounter;
+          State = GameEngineState.WaitingForMove;
+          break;
         case GameEngineState.GameWon:
           if (RoundsLeft) {
             State = GameEngineState.WaitingForNextRound;
           }
           else if (LevelsLeft) {
             State = GameEngineState.WaitingForNextLevel;
+          }
+          else {
+            // TODO: implement what happens if the player succeeds all levels :-/
+            State = GameEngineState.Initialized;
           }
           break;
         case GameEngineState.WaitingForNextRound:

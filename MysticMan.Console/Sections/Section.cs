@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MysticMan.ConsoleApp.Extensions;
 using MysticMan.ConsoleApp.Fields;
 
 namespace MysticMan.ConsoleApp.Sections {
@@ -9,11 +10,15 @@ namespace MysticMan.ConsoleApp.Sections {
     private readonly List<FieldBase> _fields = new List<FieldBase>();
     private bool _isInitialized;
 
+    private char[,] _buffer;
+
+
     protected Section(IScreenWriter screenWriter, IScreenInfo screenInfo) {
       ScreenInfo = screenInfo;
       ScreenWriter = screenWriter;
       Position = new Position(0, 0);
       Size = new Size(screenInfo.Width, screenInfo.Height);
+      _buffer = new char[Size.Width, Size.Height];
     }
 
     public Position Position { get; }
@@ -42,18 +47,44 @@ namespace MysticMan.ConsoleApp.Sections {
 
     public void SetContent(string content) {
       _content = content;
-      char[,] contentBuffer = CreateStringBuffer(_content);
-      Size.Width = contentBuffer.GetLength(0);
-      Size.Height = contentBuffer.GetLength(1);
+      Write(content, 0, 0);
+      _buffer = _buffer.ShrinkLines();
+      Size.Height = _buffer.GetLength(1);
+    }
+
+    public void AppendLine(string content) {
+      Write(content, 0, Size.Height, true);
+      _buffer = _buffer.ShrinkLines();
+      Size.Height = _buffer.GetLength(1);
+    }
+
+
+
+
+    protected void Write(string content, int left, int top, bool append = false) {
+      char[,] stringBuffer = CreateStringBuffer(content);
+
+      int width = Math.Max(_buffer.GetWidth(), left + stringBuffer.GetWidth());
+      int height = Math.Max(_buffer.GetHeight(), top + stringBuffer.GetHeight());
+      if (append) {
+        height = _buffer.GetHeight() + stringBuffer.GetHeight();
+      }
+      _buffer = _buffer.Stretch(width, height);
+
+      Size.Width = _buffer.GetLength(0);
+      Size.Height = _buffer.GetLength(1);
+
+      stringBuffer.CopyTo(_buffer, left, top);
     }
 
     public void Draw() {
       if (!IsInitialized) {
         throw new InvalidOperationException($"You must initialize the {nameof(Section)} before you can draw it.");
       }
-      // Build buffer based on the Size
-      char[,] contentBuffer = GetContentBuffer();
-      WriteBuffer(contentBuffer);
+
+      char[] charArray = _buffer.ToCharArray();
+      Console.SetCursorPosition(Position.Left, Position.Top);
+      Console.Write(charArray);
 
       foreach (FieldBase field in _fields.OrderBy(f => f.Top)) {
         Type fieldtype = field.GetType();
@@ -66,7 +97,7 @@ namespace MysticMan.ConsoleApp.Sections {
       }
     }
 
-    protected void WriteBuffer(char[,] contentBuffer){
+    private void WriteBuffer(char[,] contentBuffer){
       char[,] buffer = new char[Console.BufferWidth, Size.Height];
 
       WriteBuffer(buffer, contentBuffer);
@@ -145,5 +176,8 @@ namespace MysticMan.ConsoleApp.Sections {
       WriteBuffer(buffer, buffer);
     }
 
+    protected void WriteContent() {
+      Write(_content, 0, 0);
+    }
   }
 }

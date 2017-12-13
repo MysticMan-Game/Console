@@ -97,6 +97,7 @@ namespace MysticMan.ConsoleApp {
             case GameEngineState.GameLost:
               _mainScreen.ShowLostScreen();
               if (_mainScreen.AskPlayAgain()) {
+                _mainScreen.RefreshGameSection();
                 _engine.PrepareNextRound();
               }
               else {

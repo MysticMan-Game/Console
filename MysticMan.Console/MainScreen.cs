@@ -80,9 +80,9 @@ namespace MysticMan.ConsoleApp {
       _gameSection.Top = _headerSection.Bottom + 1;
       _gameSection.Initialize();
       _gameSection.Draw();
-      if (Console.WindowHeight < _gameSection.Bottom + 5) {
-        Console.WindowHeight = _gameSection.Bottom + 5;
-      }
+      //if (Console.WindowHeight < _gameSection.Bottom + 5) {
+      //  Console.WindowHeight = _gameSection.Bottom + 5;
+      //}
     }
 
     private void PrintScreen() {
@@ -108,7 +108,7 @@ namespace MysticMan.ConsoleApp {
     }
 
     public void RefreshGameSection() {
-      _gameSection.Draw();
+      _gameSection.Refresh();
     }
 
     public void ShowLostScreen() {

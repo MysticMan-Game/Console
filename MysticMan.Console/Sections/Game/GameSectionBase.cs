@@ -5,6 +5,8 @@ using MysticMan.ConsoleApp.Fields;
 
 namespace MysticMan.ConsoleApp.Sections.Game {
   public abstract class GameSectionBase : Section {
+    private string _statistics;
+
     protected GameSectionBase(IScreenWriter screenWriter, IScreenInfo screenInfo, IScreenReader screenReader) : base(screenWriter, screenInfo) {
       ScreenReader = screenReader;
     }
@@ -81,11 +83,13 @@ namespace MysticMan.ConsoleApp.Sections.Game {
 
       char[,] stringBuffer = CreateStringBuffer(value);
       char[,] buffer = GetContentBuffer();
+
       int left = buffer.GetLength(0) / 2 - stringBuffer.GetLength(0) / 2;
       left = Math.Max(4, left);
-      buffer = buffer.Stretch(Console.BufferWidth, buffer.GetLength(1));
-      stringBuffer.CopyTo(buffer, left, (buffer.GetLength(1) - valueHeight) / 2);
-      WriteBuffer(buffer);
+      int top  = (buffer.GetLength(1) - valueHeight) / 2;
+      WriteContent();
+      Write(value,left, top );
+      Draw();
     }
 
     public void WinningScreen() {
@@ -114,6 +118,16 @@ namespace MysticMan.ConsoleApp.Sections.Game {
       PlayAgainField.Read();
       PlayAgainField.Clear();
       return PlayAgainField.Input;
+    }
+
+    protected void SetStats(string statistics) {
+      _statistics = statistics;
+      AppendLine(_statistics);
+    }
+
+    public void Refresh() {
+      WriteContent();
+      Draw();
     }
   }
 }
