@@ -13,5 +13,6 @@ namespace MysticMan.ConsoleApp.Engine{
     void Start();
     void Resolve(string solution);
     event EventHandler WallReached;
+    //Test
   }
 }
