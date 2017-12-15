@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MysticMan.ConsoleApp.Engine {
   public class TestEngine : IGameEngine {
@@ -10,6 +8,8 @@ namespace MysticMan.ConsoleApp.Engine {
     private int _maxLevelsCounter;
     private int _maxMoveCounter;
     private int _maxRoundsCounter;
+    private Position _startPosition;
+    private Position _currentPosition;
 
     private bool RoundsLeft => Round < _maxRoundsCounter;
     private bool LevelsLeft => Level < _maxLevelsCounter;
@@ -31,36 +31,81 @@ namespace MysticMan.ConsoleApp.Engine {
 
     /// <inheritdoc />
     public void PrepareNextRound() {
+      _startPosition = new Position(1, 1);
+      _currentPosition = new Position(1, 1);
       UpdateState();
     }
 
     /// <inheritdoc />
     public void Initialize() {
       State = GameEngineState.Initialized;
+      _startPosition =  new Position(1, 1);
+      _currentPosition =  new Position(1, 1);
     }
 
     /// <inheritdoc />
     public void MoveUp() {
-      _moveState.Append("^");
-      UpdateState();
+      if (Move(MoveDirection.Up)) {
+        _moveState.Append("^");
+        UpdateState();
+      }
+    }
+
+    private bool Move(MoveDirection direction) {
+
+      switch (direction) {
+        case MoveDirection.Left:
+          _currentPosition.Left -= 1;
+          break;
+        case MoveDirection.Right:
+          _currentPosition.Left += 1;
+          break;
+        case MoveDirection.Up:
+          _currentPosition.Top -= 1;
+          break;
+        case MoveDirection.Down:
+          _currentPosition.Top += 1;
+          break;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+      }
+      if (_currentPosition.Left < 0) {
+        _currentPosition.Left += 1;
+        OnWallReached();
+        return false;
+      }
+      if (_currentPosition.Top < 0) {
+        _currentPosition.Top += 1;
+        OnWallReached();
+        return false;
+      }
+      return true;
     }
 
     /// <inheritdoc />
     public void MoveDown() {
-      _moveState.Append("_");
-      UpdateState();
+      if (Move(MoveDirection.Down)) {
+        _moveState.Append("_");
+
+        UpdateState();
+      }
     }
 
     /// <inheritdoc />
     public void MoveLeft() {
-      _moveState.Append("<");
-      UpdateState();
+      if (Move(MoveDirection.Left)) {
+        _moveState.Append("<");
+
+        UpdateState();
+      }
     }
 
     /// <inheritdoc />
     public void MoveRight() {
-      _moveState.Append(">");
-      UpdateState();
+      if (Move(MoveDirection.Right)) {
+        _moveState.Append(">");
+        UpdateState();
+      }
     }
 
     /// <inheritdoc />
@@ -79,7 +124,7 @@ namespace MysticMan.ConsoleApp.Engine {
     public int Round { get; private set; }
 
     /// <inheritdoc />
-    public string CurrentPosition => "B2";
+    public string CurrentPosition => BuildPosition( _currentPosition.Left, _currentPosition.Top);
 
     /// <inheritdoc />
     public void Start() {
@@ -95,7 +140,7 @@ namespace MysticMan.ConsoleApp.Engine {
 
     /// <inheritdoc />
     public ISolutionResult Resolve(string solution) {
-      string startPosition = CalculateMovesRevers("B2");
+      string startPosition = BuildPosition(_startPosition.Left, _startPosition.Top);
 
       if (string.Equals(solution, startPosition, StringComparison.InvariantCultureIgnoreCase)) {
         State = GameEngineState.GameWon;
@@ -131,35 +176,7 @@ namespace MysticMan.ConsoleApp.Engine {
       return result;
     }
 
-    private string CalculateMovesRevers(string solution) {
-      Regex regex = new Regex("(?<char>[A-Za-z])(?<number>[0-9]{1,2})");
-      Match match = regex.Match(solution);
-      string character = match.Groups["char"].Value;
-      string number = match.Groups["number"].Value;
-      int left = character[0] - 65;
-      int top = int.Parse(number) - 1;
-
-      Func<int, int, string> buildPosition = (left1, top1) => $"{(char)(left1 + 65)}{top1 + 1}";
-      string position = "";
-      foreach (char move1 in _moveState.ToString().Reverse()) {
-        switch (move1) {
-          case '>':
-            left = Math.Max(left - 1, 0);
-            break;
-          case '<':
-            left = Math.Min(left + 1, 4);
-            break;
-          case '_':
-            top = Math.Max(top - 1, 0);
-            break;
-          case '^':
-            top = Math.Min(top + 1, 4);
-            break;
-        }
-        position = buildPosition(left, top);
-      }
-      return position;
-    }
+    private string BuildPosition(int left, int top) => $"{(char)(left + 65)}{top + 1}";
 
     private void UpdateState() {
       switch (State) {
@@ -207,6 +224,13 @@ namespace MysticMan.ConsoleApp.Engine {
     protected virtual void OnWallReached() {
       WallReached?.Invoke(this, EventArgs.Empty);
     }
+  }
+
+  public enum MoveDirection {
+    Left,
+    Right,
+    Up,
+    Down
   }
 
   public interface ISolutionResult {
