@@ -13,8 +13,9 @@ namespace MysticMan.ConsoleApp.Engine{
     bool NextRoundAvailable { get; }
     int Level { get; }
     int Round { get; }
+    string CurrentPosition { get; }
     void Start();
-    void Resolve(string solution);
+    ISolutionResult Resolve(string solution);
     event EventHandler WallReached;
     void StartNextRound();
     void PrepareNextRound();

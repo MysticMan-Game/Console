@@ -47,7 +47,7 @@ namespace MysticMan.ConsoleApp {
     private void InputLoop() {
       // Enter the input loop
       _exitLoop = false;
-
+      ISolutionResult solutionResult = null;
 
       do {
         if (null != _engine) {
@@ -59,10 +59,10 @@ namespace MysticMan.ConsoleApp {
               ConsoleKeyInfo input = Console.ReadKey(true);
               switch (input.Key) {
                 case ConsoleKey.Spacebar: {
-                    _mainScreen.RefreshGameSection();
-                    _engine.Start();
-                    break;
-                  }
+                  _mainScreen.RefreshGameSection();
+                  _engine.Start();
+                  break;
+                }
               }
               break;
             case GameEngineState.WaitingForMove:
@@ -84,11 +84,12 @@ namespace MysticMan.ConsoleApp {
               }
               break;
             case GameEngineState.WaitingForResolving:
-              // TODO: Write hint for the user to enter the Resolution
-              string solution = _mainScreen.AskForSolution();
-              _engine.Resolve(solution);
 
-              break;
+              string currentPosition = _engine.CurrentPosition;
+              _mainScreen.ShowMysticMan(currentPosition);
+              string solution = _mainScreen.AskForSolution(); 
+              solutionResult = _engine.Resolve(solution);
+             break;
             case GameEngineState.WaitingForNextLevel:
             case GameEngineState.WaitingForNextRound:
               _mainScreen.RefreshGameSection();
@@ -96,6 +97,7 @@ namespace MysticMan.ConsoleApp {
               break;
             case GameEngineState.GameLost:
               _mainScreen.ShowLostScreen();
+              _mainScreen.ShowSolution(solutionResult);
               if (_mainScreen.AskPlayAgain()) {
                 _mainScreen.RefreshGameSection();
                 _engine.PrepareNextRound();
@@ -106,6 +108,7 @@ namespace MysticMan.ConsoleApp {
               break;
             case GameEngineState.GameWon:
               _mainScreen.ShowWinningScreen();
+              _mainScreen.ShowSolution(solutionResult);
               if (_engine.NextRoundAvailable) {
                 if (_mainScreen.AskPlayAgain()) {
                   _engine.PrepareNextRound();
@@ -156,15 +159,15 @@ namespace MysticMan.ConsoleApp {
               _mainScreen.Moves -= 1;
               break;
             case ConsoleKey.M: {
-                for (int i = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) - 1; i >= 0; i--)
-                  _mainScreen.ShowMysticMan($"{(char)(65 + i)}{i + 1}");
+              for (int i = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) - 1; i >= 0; i--)
+                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{i + 1}");
 
-                int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
-                for (int i = min - 1; i >= 0; i--)
-                  _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
+              int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
+              for (int i = min - 1; i >= 0; i--)
+                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
 
-                break;
-              }
+              break;
+            }
             case ConsoleKey.D1:
               if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
                 _mainScreen.SetGameSection(GameSection.Small);

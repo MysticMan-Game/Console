@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using MysticMan.ConsoleApp.Engine;
 using MysticMan.ConsoleApp.Sections.Game;
 
 namespace MysticMan.ConsoleApp {
@@ -92,8 +95,13 @@ namespace MysticMan.ConsoleApp {
     }
 
     public void ShowMysticMan(string field) {
-      _gameSection.ShowMysticMan(field);
+      _gameSection.ShowMysticMan(field, ConsoleColor.Red);
     }
+
+    public void ShowMove(string field) {
+      _gameSection.ShowMysticMan(field, ConsoleColor.Green);
+    }
+
 
     public int MaxXCells => _gameSection.XCounter;
     public int MaxYCells => _gameSection.YCounter;
@@ -121,6 +129,48 @@ namespace MysticMan.ConsoleApp {
 
     public void ShowWinningScreen() {
       _gameSection.WinningScreen();
+    }
+
+    public void ShowSolution(ISolutionResult solutionResult) {
+      ShowMove(solutionResult.AnsweredPosition);
+      Regex regex = new Regex("(?<char>[A-Za-z])(?<number>[0-9]{1,2})");
+      Match match = regex.Match(solutionResult.AnsweredPosition);
+      string character = match.Groups["char"].Value;
+      string number = match.Groups["number"].Value;
+      int left = character[0] - 65;
+      int top = int.Parse(number) - 1;
+
+      ShowMysticMan(solutionResult.MagicMan);
+
+      Func<int, int, string> buildPosition = (left1, top1) => $"{(char)(left1 + 65)}{top1 + 1}";
+      for (int i = 0; i < solutionResult.Moves.ToList().Count; i++) {
+        string move = solutionResult.Moves.ElementAt(i);
+        switch (move) {
+          case "left":
+            left = Math.Max(left - 1, 0);
+            break;
+          case "right":
+            left = Math.Min(left + 1, 4);
+            break;
+          case "down":
+            top = Math.Min(top + 1, 4);
+            break;
+          case "up":
+            top = Math.Max(top - 1, 0);
+            break;
+        }
+        string position = buildPosition(left, top);
+        if (i == solutionResult.Moves.Count()-1) {
+          ShowLastMove(position);
+        }
+        else {
+          ShowMove(position);
+        }
+      }
+    }
+
+    private void ShowLastMove(string position) {
+      _gameSection.ShowMysticMan(position, ConsoleColor.Magenta);      
     }
   }
 

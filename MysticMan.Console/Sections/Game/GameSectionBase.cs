@@ -45,10 +45,10 @@ namespace MysticMan.ConsoleApp.Sections.Game {
     public abstract int YCounter { get; }
     public IScreenReader ScreenReader { get; set; }
 
-    public void ShowMysticMan(string field) {
+    public void ShowMysticMan(string field, ConsoleColor foregroundColor) {
       if (CellPositions.ContainsKey(field)) {
         Position position = CellPositions[field];
-        ScreenWriter.Write("X", Position.Left + position.Left, Position.Top + position.Top);
+        ScreenWriter.Write("X", Position.Left + position.Left, Position.Top + position.Top, foregroundColor);
       }
     }
 

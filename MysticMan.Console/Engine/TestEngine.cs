@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MysticMan.ConsoleApp.Engine {
   public class TestEngine : IGameEngine {
@@ -76,6 +79,9 @@ namespace MysticMan.ConsoleApp.Engine {
     public int Round { get; private set; }
 
     /// <inheritdoc />
+    public string CurrentPosition => "B2";
+
+    /// <inheritdoc />
     public void Start() {
       _moveState.Clear();
       _maxMoveCounter = MovesLeft = 5;
@@ -88,36 +94,82 @@ namespace MysticMan.ConsoleApp.Engine {
     }
 
     /// <inheritdoc />
-    public void Resolve(string solution) {
-      if (solution == "zz") {
+    public ISolutionResult Resolve(string solution) {
+      string startPosition = CalculateMovesRevers("B2");
+
+      if (string.Equals(solution, startPosition, StringComparison.InvariantCultureIgnoreCase)) {
         State = GameEngineState.GameWon;
       }
       else {
         State = GameEngineState.GameLost;
       }
+
+      List<string> moves = new List<string>();
+      for (int i = 0; i < _moveState.Length; i++) {
+        char move = _moveState[i];
+        switch (move) {
+          case '<':
+            moves.Add("left");
+            break;
+          case '>':
+            moves.Add("right");
+            break;
+          case '^':
+            moves.Add("up");
+            break;
+          case '_':
+            moves.Add("down");
+            break;
+        }
+      }
+      SolutionResult result = new SolutionResult {
+        AnsweredPosition = solution,
+        MagicMan = startPosition,
+        Moves = moves
+      };
+
+      return result;
+    }
+
+    private string CalculateMovesRevers(string solution) {
+      Regex regex = new Regex("(?<char>[A-Za-z])(?<number>[0-9]{1,2})");
+      Match match = regex.Match(solution);
+      string character = match.Groups["char"].Value;
+      string number = match.Groups["number"].Value;
+      int left = character[0] - 65;
+      int top = int.Parse(number) - 1;
+
+      Func<int, int, string> buildPosition = (left1, top1) => $"{(char)(left1 + 65)}{top1 + 1}";
+      string position = "";
+      foreach (char move1 in _moveState.ToString().Reverse()) {
+        switch (move1) {
+          case '>':
+            left = Math.Max(left - 1, 0);
+            break;
+          case '<':
+            left = Math.Min(left + 1, 4);
+            break;
+          case '_':
+            top = Math.Max(top - 1, 0);
+            break;
+          case '^':
+            top = Math.Min(top + 1, 4);
+            break;
+        }
+        position = buildPosition(left, top);
+      }
+      return position;
     }
 
     private void UpdateState() {
-
       switch (State) {
         case GameEngineState.Initialized:
           State = GameEngineState.WaitingForMove;
           break;
         case GameEngineState.WaitingForMove:
-          if (_moveState.ToString() == "<<<") {
-            OnWallReached();
-          }
-          else if (_moveState.ToString() == "^>_<") {
-            State = GameEngineState.GameLost;
-          }
-          else if (_moveState.ToString() == "><><") {
-            State = GameEngineState.GameWon;
-          }
-          else {
-            MovesLeft--;
-            if (State == GameEngineState.WaitingForMove) {
-              State = MovesLeft > 0 ? GameEngineState.WaitingForMove : GameEngineState.WaitingForResolving;
-            }
+          MovesLeft--;
+          if (MovesLeft <= 0) {
+            State = GameEngineState.WaitingForResolving;
           }
           break;
         case GameEngineState.WaitingForResolving:
@@ -155,5 +207,19 @@ namespace MysticMan.ConsoleApp.Engine {
     protected virtual void OnWallReached() {
       WallReached?.Invoke(this, EventArgs.Empty);
     }
+  }
+
+  public interface ISolutionResult {
+    IEnumerable<string> Moves { get; }
+    string MagicMan { get; }
+    string AnsweredPosition { get; }
+  }
+
+  public class SolutionResult : ISolutionResult {
+    public IEnumerable<string> Moves { get; set; }
+
+    public string MagicMan { get; set; }
+
+    public string AnsweredPosition { get; set; }
   }
 }
