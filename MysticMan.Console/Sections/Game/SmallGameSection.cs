@@ -80,6 +80,27 @@ namespace MysticMan.ConsoleApp.Sections.Game {
         return cells;
       }
     }
-   
+
+    /// <inheritdoc />
+    protected override FormatedString GetIndicationFieldValue(Signal signal) {
+      switch (signal) {
+        case Signal.MysticMan:
+        case Signal.CurrentPosition:
+          return new FormatedString("%-)") { ForegroundColor = ConsoleColor.Red };
+        case Signal.PlayerStart:
+          return new FormatedString("▓") { ForegroundColor = ConsoleColor.DarkCyan };
+        case Signal.MoveUp:
+        case Signal.MoveDown:
+        case Signal.MoveLeft:
+        case Signal.MoveRight:
+          return new FormatedString("X") { ForegroundColor = ConsoleColor.Green };
+        case Signal.Answer:
+          return new FormatedString("▓") { ForegroundColor = ConsoleColor.Green };
+        case Signal.LastMove:
+          return new FormatedString("▓") { ForegroundColor = ConsoleColor.Yellow };
+        default:
+          return new FormatedString(" ");
+      }
+    }
   }
 }

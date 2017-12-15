@@ -1,7 +1,10 @@
-﻿namespace MysticMan.ConsoleApp{
+﻿using System;
+
+namespace MysticMan.ConsoleApp{
   public interface IScreenInfo {
-    int Width { get; set; }
-    int Height { get; set; }
+    int Width { get;  }
+    int Height { get;  }
     Position CursorPosition { get; }
+    ConsoleColor DefaultBackgroundColor { get;  }
   }
 }

@@ -86,7 +86,7 @@ namespace MysticMan.ConsoleApp {
             case GameEngineState.WaitingForResolving:
 
               string currentPosition = _engine.CurrentPosition;
-              _mainScreen.ShowMysticMan(currentPosition);
+              _mainScreen.IndicateField(currentPosition, Signal.CurrentPosition);
               string solution = _mainScreen.AskForSolution(); 
               solutionResult = _engine.Resolve(solution);
              break;
@@ -160,11 +160,11 @@ namespace MysticMan.ConsoleApp {
               break;
             case ConsoleKey.M: {
               for (int i = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) - 1; i >= 0; i--)
-                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{i + 1}");
+                _mainScreen.IndicateField($"{(char)(65 + i)}{i + 1}", Signal.MysticMan);
 
               int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
               for (int i = min - 1; i >= 0; i--)
-                _mainScreen.ShowMysticMan($"{(char)(65 + i)}{min - i}");
+                _mainScreen.IndicateField($"{(char)(65 + i)}{min - i}", Signal.CurrentPosition);
 
               break;
             }

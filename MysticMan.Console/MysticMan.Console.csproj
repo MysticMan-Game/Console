@@ -57,6 +57,7 @@
     <Compile Include="Fields\IntInputField.cs" />
     <Compile Include="Fields\NumberRangeInputField.cs" />
     <Compile Include="Fields\StringInputField.cs" />
+    <Compile Include="GameSection.cs" />
     <Compile Include="Sections\Game\GameHeaderSection.cs" />
     <Compile Include="Sections\Game\LargeGameSection.cs" />
     <Compile Include="Sections\Game\XtraLargeGameSection.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainScreen.cs" />
+    <Compile Include="Signal.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Fields\StringField.cs" />
   </ItemGroup>

@@ -2,19 +2,20 @@
 
 namespace MysticMan.ConsoleApp{
   internal class ConsoleScreenInfo : IScreenInfo {
-    /// <inheritdoc />
-    public int Width {
-      get => Console.WindowWidth -1;
-      set => Console.WindowWidth = value +1;
+    public ConsoleScreenInfo() {
+      DefaultBackgroundColor = Console.BackgroundColor;
     }
 
     /// <inheritdoc />
-    public int Height {
-      get => Console.WindowHeight -1 ;
-      set => Console.WindowHeight = value +1 ;
-    }
+    public int Width => Console.WindowWidth - 1;
+
+    /// <inheritdoc />
+    public int Height => Console.WindowHeight -1;
 
     /// <inheritdoc />
     public Position CursorPosition => new Position(Console.CursorLeft, Console.CursorTop);
+
+    /// <inheritdoc />
+    public ConsoleColor DefaultBackgroundColor { get; }
   }
 }

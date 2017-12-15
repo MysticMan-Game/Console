@@ -94,14 +94,9 @@ namespace MysticMan.ConsoleApp {
       _gameSection.Draw();
     }
 
-    public void ShowMysticMan(string field) {
-      _gameSection.ShowMysticMan(field, ConsoleColor.Red);
+    public void IndicateField(string field, Signal signal) {
+      _gameSection.IndicateField(field, signal);
     }
-
-    public void ShowMove(string field) {
-      _gameSection.ShowMysticMan(field, ConsoleColor.Green);
-    }
-
 
     public int MaxXCells => _gameSection.XCounter;
     public int MaxYCells => _gameSection.YCounter;
@@ -132,52 +127,45 @@ namespace MysticMan.ConsoleApp {
     }
 
     public void ShowSolution(ISolutionResult solutionResult) {
-      ShowMove(solutionResult.AnsweredPosition);
+      IndicateField(solutionResult.AnsweredPosition, Signal.PlayerStart);
       Regex regex = new Regex("(?<char>[A-Za-z])(?<number>[0-9]{1,2})");
       Match match = regex.Match(solutionResult.AnsweredPosition);
       string character = match.Groups["char"].Value;
       string number = match.Groups["number"].Value;
       int left = character[0] - 65;
       int top = int.Parse(number) - 1;
-
-      ShowMysticMan(solutionResult.MagicMan);
+      IndicateField(solutionResult.MagicMan, Signal.MysticMan);
 
       Func<int, int, string> buildPosition = (left1, top1) => $"{(char)(left1 + 65)}{top1 + 1}";
       for (int i = 0; i < solutionResult.Moves.ToList().Count; i++) {
         string move = solutionResult.Moves.ElementAt(i);
+        Signal signal = Signal.Unknown;
         switch (move) {
           case "left":
+            signal = Signal.MoveLeft;
             left = Math.Max(left - 1, 0);
             break;
           case "right":
+            signal = Signal.MoveRight;
             left = Math.Min(left + 1, 4);
             break;
           case "down":
+            signal = Signal.MoveDown;
             top = Math.Min(top + 1, 4);
             break;
           case "up":
+            signal = Signal.MoveUp;
             top = Math.Max(top - 1, 0);
             break;
         }
-        string position = buildPosition(left, top);
+        string position =  buildPosition(left, top);
         if (i == solutionResult.Moves.Count()-1) {
-          ShowLastMove(position);
+          IndicateField(position, Signal.LastMove);
         }
         else {
-          ShowMove(position);
+          IndicateField(position, signal);
         }
       }
     }
-
-    private void ShowLastMove(string position) {
-      _gameSection.ShowMysticMan(position, ConsoleColor.Magenta);      
-    }
-  }
-
-  public enum GameSection {
-    Small,
-    Medium,
-    Large,
-    XLarge
   }
 }

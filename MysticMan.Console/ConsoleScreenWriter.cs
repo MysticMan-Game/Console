@@ -4,10 +4,12 @@ namespace MysticMan.ConsoleApp{
   public class ConsoleScreenWriter :IScreenWriter{
     private string _title;
     private bool _enabled;
-    private readonly ConsoleColor _defaultForeGround;
+    private readonly ConsoleColor _defaultForegroundColor;
+    private ConsoleColor _defaultBackgroundColor;
 
     public ConsoleScreenWriter(bool enabled = true) {
-      _defaultForeGround = Console.ForegroundColor;
+      _defaultForegroundColor = Console.ForegroundColor;
+      _defaultBackgroundColor = Console.BackgroundColor;
       _enabled = enabled;
     }
     /// <inheritdoc />
@@ -63,7 +65,19 @@ namespace MysticMan.ConsoleApp{
         Console.SetCursorPosition(left, top);
         Console.ForegroundColor = foreGround;
         Console.Write(value);
-        Console.ForegroundColor = _defaultForeGround;
+        Console.ForegroundColor = _defaultForegroundColor;
+      }
+    }
+
+    /// <inheritdoc />
+    public void Write(string value, int left, int top, ConsoleColor foreGround, ConsoleColor backgroundColor) {
+      if (Enabled) {
+        Console.SetCursorPosition(left, top);
+        Console.ForegroundColor = foreGround;
+        Console.BackgroundColor = backgroundColor;
+        Console.Write(value);
+        Console.ForegroundColor = _defaultForegroundColor;
+        Console.BackgroundColor = _defaultBackgroundColor;
       }
     }
   }

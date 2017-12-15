@@ -129,5 +129,40 @@ namespace MysticMan.ConsoleApp.Sections.Game {
       WriteContent();
       Draw();
     }
+
+    public void IndicateField(string field, Signal signal) {
+
+      FormatedString formatedString = GetIndicationFieldValue(signal);
+
+      string value = formatedString.Text;
+      char[,] stringBuffer = CreateStringBuffer(value);
+      if (CellPositions.ContainsKey(field)) {
+        Position position = CellPositions[field];
+        int left = Position.Left + (position.Left - (stringBuffer.GetLength(0) / 2));
+        int top = Position.Top + (position.Top - (stringBuffer.GetLength(1) / 2));
+        ScreenWriter.Write(value, left,top,formatedString.ForegroundColor, formatedString.BackgroundColor);
+      }
+    }
+
+    protected virtual FormatedString GetIndicationFieldValue(Signal signal){
+      FormatedString formatedString = new FormatedString("X") {
+        ForegroundColor =ConsoleColor.Green,
+        BackgroundColor = ScreenInfo.DefaultBackgroundColor
+      };
+      return formatedString;
+    }
+  }
+
+  public class FormatedString {
+    private readonly string _text;
+
+    public FormatedString(string text) {
+      _text = text;
+    }
+
+    public ConsoleColor ForegroundColor { get; set; }
+    public ConsoleColor BackgroundColor { get; set; }
+
+    public string Text => _text;
   }
 }

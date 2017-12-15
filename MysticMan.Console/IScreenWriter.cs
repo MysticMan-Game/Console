@@ -13,5 +13,6 @@ namespace MysticMan.ConsoleApp{
 
     void Write(char c, int left, int top);
     void Write(string value, int left, int top, ConsoleColor foreGround);
+    void Write(string value, int left, int top, ConsoleColor foreGround, ConsoleColor backgroundColor);
   }
 }

@@ -10,19 +10,17 @@ namespace MysticMan.ConsoleApp.Fields{
       ScreenReader = screenReader;
     }
 
-    private IScreenReader ScreenReader { get; }
+    protected IScreenReader ScreenReader { get; }
 
-    public IScreenInfo ScreenInfo {
-      get { return _screenInfo; }
-    }
+    public IScreenInfo ScreenInfo => _screenInfo;
 
     public void Read() {
       bool isValid = false;
 
-
       do {
         Draw();
-        string input = ScreenReader.ReadLine(new Position(Left + (GetValue()?.Length ?? 0) + 1, Top));
+        Position position = new Position(Left + (GetValue()?.Length ?? 0) + 1, Top);
+        string input = GetInput(position);
 
         try {
           SetInput(input);
@@ -33,6 +31,11 @@ namespace MysticMan.ConsoleApp.Fields{
           ScreenWriter.Write(emptyValue, Left, Top);
         }
       } while (!isValid);
+    }
+
+    protected virtual string GetInput(Position position){
+      string input = ScreenReader.ReadLine(position);
+      return input;
     }
 
     protected abstract void SetInput(string input);
