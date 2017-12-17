@@ -1,5 +1,6 @@
 ﻿using System;
 using MysticMan.ConsoleApp.Engine;
+using MysticMan.Logic;
 
 namespace MysticMan.ConsoleApp {
   internal class Program {

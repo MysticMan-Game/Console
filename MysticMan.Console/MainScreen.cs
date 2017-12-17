@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MysticMan.ConsoleApp.Engine;
 using MysticMan.ConsoleApp.Sections.Game;
+using MysticMan.Logic;
 
 namespace MysticMan.ConsoleApp {
   public class MainScreen {

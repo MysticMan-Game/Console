@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysticMan.Console", "MysticMan.Console\MysticMan.Console.csproj", "{E20522A8-EEC0-4D17-BF32-FF048076FF68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{3A5A21BC-B91E-4FB6-BE16-AABF57AEBD93}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MysticMan.Logic", "modules\Engine\src\MysticMan.Logic\MysticMan.Logic.csproj", "{09C2F805-8C57-4931-A015-E5C09BDB94E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{E20522A8-EEC0-4D17-BF32-FF048076FF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20522A8-EEC0-4D17-BF32-FF048076FF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20522A8-EEC0-4D17-BF32-FF048076FF68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09C2F805-8C57-4931-A015-E5C09BDB94E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09C2F805-8C57-4931-A015-E5C09BDB94E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09C2F805-8C57-4931-A015-E5C09BDB94E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09C2F805-8C57-4931-A015-E5C09BDB94E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09C2F805-8C57-4931-A015-E5C09BDB94E8} = {3A5A21BC-B91E-4FB6-BE16-AABF57AEBD93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1740E1A3-8C7C-42C0-B290-A518C768EFFB}

@@ -45,8 +45,6 @@
     <Compile Include="ConsoleScreenInfo.cs" />
     <Compile Include="ConsoleScreenReader.cs" />
     <Compile Include="ConsoleScreenWriter.cs" />
-    <Compile Include="Engine\GameEngineState.cs" />
-    <Compile Include="Engine\IGameEngine.cs" />
     <Compile Include="Engine\TestEngine.cs" />
     <Compile Include="Extensions\CharBufferExtensions.cs" />
     <Compile Include="Fields\BooleanInputField.cs" />
@@ -83,6 +81,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\modules\Engine\src\MysticMan.Logic\MysticMan.Logic.csproj">
+      <Project>{09c2f805-8c57-4931-a015-e5c09bdb94e8}</Project>
+      <Name>MysticMan.Logic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,3 @@
+[submodule ".\\modules\\Engine"]
+	path = .\\modules\\Engine
+	url = git@github.com:MysticMan-Game/Engine.git

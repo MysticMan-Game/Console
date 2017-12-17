@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MysticMan.Logic;
 
 namespace MysticMan.ConsoleApp.Engine {
   public class TestEngine : IGameEngine {
@@ -231,12 +232,6 @@ namespace MysticMan.ConsoleApp.Engine {
     Right,
     Up,
     Down
-  }
-
-  public interface ISolutionResult {
-    IEnumerable<string> Moves { get; }
-    string MagicMan { get; }
-    string AnsweredPosition { get; }
   }
 
   public class SolutionResult : ISolutionResult {
