@@ -14,7 +14,7 @@ namespace MysticMan.ConsoleApp.Engine {
 
     private bool RoundsLeft => Round < _maxRoundsCounter;
     private bool LevelsLeft => Level < _maxLevelsCounter;
-    public event EventHandler WallReached;
+    public event EventHandler WallReachedEvent;
 
     /// <inheritdoc />
     public void StartNextRound() {
@@ -223,7 +223,7 @@ namespace MysticMan.ConsoleApp.Engine {
     }
 
     protected virtual void OnWallReached() {
-      WallReached?.Invoke(this, EventArgs.Empty);
+      WallReachedEvent?.Invoke(this, EventArgs.Empty);
     }
   }
 

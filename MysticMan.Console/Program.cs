@@ -35,7 +35,7 @@ namespace MysticMan.ConsoleApp {
       if (_introScreen.Level > 1) {
         _engine = new TestEngine();
         _engine.Initialize();
-        _engine.WallReached += (sender, args) => WallSound();
+        _engine.WallReachedEvent += (sender, args) => WallSound();
       }
 
       // Run the static mainScreen
