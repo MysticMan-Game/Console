@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MysticMan.ConsoleApp.Engine;
 using MysticMan.Logic;
 
@@ -29,14 +30,14 @@ namespace MysticMan.ConsoleApp {
       _mainScreen = new MainScreen("MysticMan - Game", screenWriter, screenInfo, screenReader) {
         InfoLineOne = "Press the following Keys to modify the counters",
         InfoLineTwo = "Moves: +/- (NumPad) | Level: l/L | Rounds: r/R",
-        Level = _introScreen.Level
       };
 
-      if (_introScreen.Level > 1) {
-        _engine = new TestEngine();
+        //_engine = new TestEngine();
+        _engine = new GameEngine();
         _engine.Initialize();
         _engine.WallReachedEvent += (sender, args) => WallSound();
-      }
+
+
 
       // Run the static mainScreen
       _mainScreen.Run(InputLoop);
@@ -49,11 +50,17 @@ namespace MysticMan.ConsoleApp {
       // Enter the input loop
       _exitLoop = false;
       ISolutionResult solutionResult = null;
-
+      Dictionary<int, GameSection> _gameSections =  new Dictionary<int, GameSection> {
+        {1, GameSection.Small},
+        {2, GameSection.Medium},
+        {3, GameSection.Large},
+        {4, GameSection.XLarge},
+      };
       do {
         if (null != _engine) {
           switch (_engine.State) {
             case GameEngineState.Initialized:
+              _mainScreen.SetGameSection(_gameSections[_engine.Level]);
               _mainScreen.ShowPressSpaceToStart();
               // TODO: Write hint to the user to hit space to start with the game
               // Read a key from input and decide what todo;
@@ -94,8 +101,9 @@ namespace MysticMan.ConsoleApp {
             case GameEngineState.WaitingForNextLevel:
             case GameEngineState.WaitingForNextRound:
               // Redraw screen, maybee the MapSize has changed
-              _mainScreen.RefreshGameSection();
               _engine.StartNextRound();
+              _mainScreen.SetGameSection(_gameSections[_engine.Level]);
+              _mainScreen.RefreshGameSection();
               break;
             case GameEngineState.GameLost:
               _mainScreen.ShowLostScreen();
@@ -129,75 +137,6 @@ namespace MysticMan.ConsoleApp {
           _mainScreen.Level = _engine.Level;
           _mainScreen.Rounds = _engine.Round;
         }
-        else {
-          ConsoleKeyInfo input = Console.ReadKey(true);
-
-          switch (input.Key) {
-            case ConsoleKey.R:
-              if (input.KeyChar == 'R') {
-                _mainScreen.Rounds -= 1;
-              }
-              if (input.KeyChar == 'r') {
-                _mainScreen.Rounds += 1;
-              }
-              break;
-            case ConsoleKey.L:
-              if (input.KeyChar == 'L') {
-                _mainScreen.Level -= 1;
-              }
-              if (input.KeyChar == 'l') {
-                _mainScreen.Level += 1;
-              }
-              break;
-            case ConsoleKey.W:
-              WallSound();
-              break;
-            case ConsoleKey.Add:
-            case ConsoleKey.OemPlus:
-              _mainScreen.Moves += 1;
-              break;
-            case ConsoleKey.Subtract:
-            case ConsoleKey.OemMinus:
-              _mainScreen.Moves -= 1;
-              break;
-            case ConsoleKey.M: {
-              for (int i = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells) - 1; i >= 0; i--)
-                _mainScreen.IndicateField($"{(char)(65 + i)}{i + 1}", Signal.MysticMan);
-
-              int min = Math.Min(_mainScreen.MaxXCells, _mainScreen.MaxYCells);
-              for (int i = min - 1; i >= 0; i--)
-                _mainScreen.IndicateField($"{(char)(65 + i)}{min - i}", Signal.CurrentPosition);
-
-              break;
-            }
-            case ConsoleKey.D1:
-              if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
-                _mainScreen.SetGameSection(GameSection.Small);
-              }
-              break;
-            case ConsoleKey.D2:
-              if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
-                _mainScreen.SetGameSection(GameSection.Medium);
-              }
-              break;
-            case ConsoleKey.D3:
-              if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
-                _mainScreen.SetGameSection(GameSection.Large);
-              }
-              break;
-            case ConsoleKey.D4:
-              if ((input.Modifiers & ConsoleModifiers.Control) != 0) {
-                _mainScreen.SetGameSection(GameSection.XLarge);
-              }
-              break;
-            case ConsoleKey.Q:
-              _exitLoop = true;
-              break;
-            case ConsoleKey.C:
-              _exitLoop = (input.Modifiers & ConsoleModifiers.Control) != 0;
-              break;
-          }
-        }
       } while (!_exitLoop);
     }
 
@@ -207,11 +146,6 @@ namespace MysticMan.ConsoleApp {
     }
 
     private static void WallSound() {
-      for (int i = 0; i < 2; i++) {
-        Console.Beep(620, 420);
-        Console.Beep(680, 400);
-        Console.Beep(550, 300);
-      }
       Console.Beep(440, 600);
     }
   }

@@ -11,7 +11,6 @@ namespace MysticMan.ConsoleApp {
     }
 
     public string PlayerName => _headerSection.PlayerName;
-    public int Level => _headerSection.Level;
 
     public void Run() {
       _headerSection.Draw();
