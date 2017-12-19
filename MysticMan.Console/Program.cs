@@ -93,6 +93,7 @@ namespace MysticMan.ConsoleApp {
              break;
             case GameEngineState.WaitingForNextLevel:
             case GameEngineState.WaitingForNextRound:
+              // Redraw screen, maybee the MapSize has changed
               _mainScreen.RefreshGameSection();
               _engine.StartNextRound();
               break;
