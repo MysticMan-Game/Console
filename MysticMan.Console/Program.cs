@@ -30,6 +30,9 @@ namespace MysticMan.ConsoleApp {
       _mainScreen = new MainScreen("MysticMan - Game", screenWriter, screenInfo, screenReader) {
         InfoLineOne = "Press the following Keys to modify the counters",
         InfoLineTwo = "Moves: +/- (NumPad) | Level: l/L | Rounds: r/R",
+        //InfoLineOne = "Use the NumPad to do a move. ",
+        //InfoLineTwo = "After you finished ur moves try to find the Cell where the MysticMan started.",
+        Level = _introScreen.Level
       };
 
         //_engine = new TestEngine();
@@ -88,6 +91,18 @@ namespace MysticMan.ConsoleApp {
                   break;
                 case ConsoleKey.RightArrow:
                   _engine.MoveRight();
+                  break;
+                case ConsoleKey.F12:
+                  _mainScreen.ShowWinningScreen();
+                  _mainScreen.ShowSolution(solutionResult);
+                  if (_engine.NextRoundAvailable) {
+                    if (_mainScreen.AskPlayAgain()) {
+                      _engine.PrepareNextRound();
+                    }
+                    else {
+                      _exitLoop = true;
+                    }
+                  }
                   break;
               }
               break;
