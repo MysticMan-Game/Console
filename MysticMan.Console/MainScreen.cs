@@ -55,6 +55,11 @@ namespace MysticMan.ConsoleApp {
       set => _headerSection.InfoLineTwo = value;
     }
 
+    public string InfoLineThree {
+      get => _headerSection.InfoLineThree;
+      set => _headerSection.InfoLineThree = value;
+    }
+
     public int EndOfScreen => _gameSection.Bottom;
 
     public void Run(Action inputLoop) {
@@ -125,6 +130,10 @@ namespace MysticMan.ConsoleApp {
 
     public void ShowWinningScreen() {
       _gameSection.WinningScreen();
+    }
+
+    public void ShowCheatScreen() {
+      _gameSection.CheatScreen();
     }
 
     public void ShowSolution(ISolutionResult solutionResult) {

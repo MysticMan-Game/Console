@@ -29,7 +29,8 @@ namespace MysticMan.ConsoleApp {
       // Initialize the MainScreen
       _mainScreen = new MainScreen("MysticMan - Game", screenWriter, screenInfo, screenReader) {
         InfoLineOne = "Use the NumPad to do a move. ",
-        InfoLineTwo = "After you finished ur moves try to find \nthe Cell where the MysticMan started.",
+        InfoLineTwo = "After you finished your moves try ",
+        InfoLineThree = "to find the Cell where the MysticMan started."
       };
 
         //_engine = new TestEngine();
@@ -86,8 +87,7 @@ namespace MysticMan.ConsoleApp {
                   break;
                 case ConsoleKey.F12:
                   _engine.Cheat();
-                  _mainScreen.ShowWinningScreen();
-                  //_mainScreen.ShowSolution(solutionResult);
+                  _mainScreen.ShowCheatScreen();
                   if (_engine.NextRoundAvailable) {
                     if (_mainScreen.AskPlayAgain()) {
                       _engine.PrepareNextRound();
