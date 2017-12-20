@@ -1,4 +1,4 @@
 [submodule "Engine"]
-	path = .\\modules\\Engine
+	path = Engine
 	url = git@github.com:MysticMan-Game/Engine.git
-	branch=dev
+	branch = dev
