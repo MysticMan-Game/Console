@@ -85,8 +85,9 @@ namespace MysticMan.ConsoleApp {
                   _engine.MoveRight();
                   break;
                 case ConsoleKey.F12:
+                  _engine.Cheat();
                   _mainScreen.ShowWinningScreen();
-                  _mainScreen.ShowSolution(solutionResult);
+                  //_mainScreen.ShowSolution(solutionResult);
                   if (_engine.NextRoundAvailable) {
                     if (_mainScreen.AskPlayAgain()) {
                       _engine.PrepareNextRound();
@@ -121,6 +122,18 @@ namespace MysticMan.ConsoleApp {
               }
               else {
                 _exitLoop = true;
+              }
+              break;
+            case GameEngineState.Cheat:
+              _mainScreen.ShowWinningScreen();
+              //_mainScreen.ShowCheat();
+              if (_engine.NextRoundAvailable) {
+                if (_mainScreen.AskPlayAgain()) {
+                  _engine.PrepareNextRound();
+                }
+                else {
+                  _exitLoop = true;
+                }
               }
               break;
             case GameEngineState.GameWon:

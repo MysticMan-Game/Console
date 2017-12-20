@@ -227,6 +227,10 @@ namespace MysticMan.ConsoleApp.Engine {
     protected virtual void OnWallReached() {
       WallReachedEvent?.Invoke(this, EventArgs.Empty);
     }
+
+    public void Cheat() {
+      State = GameEngineState.GameWon;
+    }
   }
 
   public enum MoveDirection {
