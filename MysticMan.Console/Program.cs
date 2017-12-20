@@ -28,11 +28,8 @@ namespace MysticMan.ConsoleApp {
 
       // Initialize the MainScreen
       _mainScreen = new MainScreen("MysticMan - Game", screenWriter, screenInfo, screenReader) {
-        InfoLineOne = "Press the following Keys to modify the counters",
-        InfoLineTwo = "Moves: +/- (NumPad) | Level: l/L | Rounds: r/R",
-        //InfoLineOne = "Use the NumPad to do a move. ",
-        //InfoLineTwo = "After you finished ur moves try to find the Cell where the MysticMan started.",
-        Level = _introScreen.Level
+        InfoLineOne = "Use the NumPad to do a move. ",
+        InfoLineTwo = "After you finished ur moves try to find \nthe Cell where the MysticMan started.",
       };
 
         //_engine = new TestEngine();
@@ -53,17 +50,12 @@ namespace MysticMan.ConsoleApp {
       // Enter the input loop
       _exitLoop = false;
       ISolutionResult solutionResult = null;
-      Dictionary<int, GameSection> _gameSections =  new Dictionary<int, GameSection> {
-        {1, GameSection.Small},
-        {2, GameSection.Medium},
-        {3, GameSection.Large},
-        {4, GameSection.XLarge},
-      };
+     
       do {
         if (null != _engine) {
           switch (_engine.State) {
             case GameEngineState.Initialized:
-              _mainScreen.SetGameSection(_gameSections[_engine.Level]);
+              _mainScreen.SetGameSection(GetCurrentGameSection(_engine.MapSize));
               _mainScreen.ShowPressSpaceToStart();
               // TODO: Write hint to the user to hit space to start with the game
               // Read a key from input and decide what todo;
@@ -117,7 +109,7 @@ namespace MysticMan.ConsoleApp {
             case GameEngineState.WaitingForNextRound:
               // Redraw screen, maybee the MapSize has changed
               _engine.StartNextRound();
-              _mainScreen.SetGameSection(_gameSections[_engine.Level]);
+              _mainScreen.SetGameSection(GetCurrentGameSection(_engine.MapSize));
               _mainScreen.RefreshGameSection();
               break;
             case GameEngineState.GameLost:
@@ -153,6 +145,21 @@ namespace MysticMan.ConsoleApp {
           _mainScreen.Rounds = _engine.Round;
         }
       } while (!_exitLoop);
+    }
+
+    private GameSection GetCurrentGameSection(MapSize mapSize) {
+      int size = mapSize.Width + mapSize.Height;
+      switch (size) {
+        case 10:
+          return GameSection.Small;
+        case 16:
+          return GameSection.Medium;
+        case 20:
+          return GameSection.Large;
+        case 30:
+          return GameSection.XLarge;
+      }
+      return GameSection.Small;
     }
 
     private void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e) {

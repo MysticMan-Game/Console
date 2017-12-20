@@ -4,7 +4,7 @@ using System.Text;
 using MysticMan.Logic;
 
 namespace MysticMan.ConsoleApp.Engine {
-  public class TestEngine : IGameEngine {
+  public class TestEngine : IGameEngine  {
     private readonly StringBuilder _moveState = new StringBuilder();
     private int _maxLevelsCounter;
     private int _maxMoveCounter;
@@ -126,6 +126,8 @@ namespace MysticMan.ConsoleApp.Engine {
 
     /// <inheritdoc />
     public string CurrentPosition => BuildPosition( _currentPosition.Left, _currentPosition.Top);
+
+    public MapSize MapSize => MapSize.New5x5();
 
     /// <inheritdoc />
     public void Start() {
