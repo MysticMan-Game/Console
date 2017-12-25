@@ -60,19 +60,17 @@ namespace MysticMan.ConsoleApp.Sections.Game{
       RoundField = CreateField<NumberField>(55, Top + 42, 3);
       LevelField = CreateField<NumberField>(61, Top + 42, 3);
       TimerField = CreateField<NumberField>(17, Top + 43, 3);
-      SolutionInputField = new StringInputField(ScreenReader, ScreenInfo) {
+      SolutionInputField = new SolutionInputField(new Size(XCounter,YCounter),   ScreenReader, ScreenWriter, ScreenInfo) {
         Left = 5,
         Top = Top + 44,
         Length = ScreenInfo.Width,
-        ScreenWriter = ScreenWriter,
         Value = "Please enter your expected solution (e.g. \"A1\"):",
         ForeGround = ConsoleColor.Yellow
       };
-      PlayAgainField = new BooleanInputField(ScreenReader, ScreenInfo) {
+      PlayAgainField = new BooleanInputField(ScreenReader, ScreenInfo, ScreenWriter) {
         Left = 5,
         Top = Top + 44,
         Length = ScreenInfo.Width,
-        ScreenWriter = ScreenWriter,
         Value = "Want to play again? (Y/N):",
         ForeGround = ConsoleColor.Yellow
       };

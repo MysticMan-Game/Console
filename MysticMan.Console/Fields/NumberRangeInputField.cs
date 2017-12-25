@@ -35,7 +35,7 @@ namespace MysticMan.ConsoleApp.Fields {
     }
 
     /// <inheritdoc />
-    public NumberRangeInputField(IScreenReader screenReader, IScreenInfo screenInfo) : base(screenReader, screenInfo) {
+    public NumberRangeInputField(IScreenReader screenReader, IScreenInfo screenInfo, IScreenWriter screenWriter) : base(screenReader, screenInfo, screenWriter) {
     }
   }
 }

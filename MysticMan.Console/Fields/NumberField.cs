@@ -5,5 +5,9 @@
       string msg = string.Format(fmt, Value);
       ScreenWriter.Write(msg, Left, Top);
     }
+
+    /// <inheritdoc />
+    public NumberField(IScreenWriter screenWriter) : base(screenWriter){
+    }
   }
 }

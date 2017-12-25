@@ -16,5 +16,9 @@
     public override void Clear() {
       throw new System.NotImplementedException();
     }
+
+    /// <inheritdoc />
+    protected Field(IScreenWriter screenWriter) : base(screenWriter){
+    }
   }
 }

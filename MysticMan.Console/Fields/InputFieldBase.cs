@@ -5,7 +5,7 @@ namespace MysticMan.ConsoleApp.Fields{
   public abstract class InputFieldBase : StringField {
     private readonly IScreenInfo _screenInfo;
 
-    protected InputFieldBase(IScreenReader screenReader, IScreenInfo screenInfo) {
+    protected InputFieldBase(IScreenReader screenReader, IScreenWriter screenWriter, IScreenInfo screenInfo) : base(screenWriter) {
       _screenInfo = screenInfo;
       ScreenReader = screenReader;
     }
@@ -27,7 +27,7 @@ namespace MysticMan.ConsoleApp.Fields{
           isValid = true;
         }
         catch (Exception) {
-          string emptyValue = new string(Enumerable.Repeat('\0', GetValue().Length + 1 + input.Length).ToArray());
+          string emptyValue = new string(Enumerable.Repeat('\0', (GetValue()?.Length ?? 0) + 1 + input.Length).ToArray());
           ScreenWriter.Write(emptyValue, Left, Top);
         }
       } while (!isValid);

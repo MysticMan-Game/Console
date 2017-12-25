@@ -16,7 +16,7 @@ namespace MysticMan.ConsoleApp.Sections.Game {
     protected NumberField LevelField { get; set; }
     protected NumberField TimerField { get; set; }
 
-    protected StringInputField SolutionInputField { get; set; }
+    protected SolutionInputField SolutionInputField { get; set; }
 
     protected BooleanInputField PlayAgainField { get; set; }
 
@@ -44,13 +44,6 @@ namespace MysticMan.ConsoleApp.Sections.Game {
     public abstract int XCounter { get; }
     public abstract int YCounter { get; }
     public IScreenReader ScreenReader { get; set; }
-
-    public void ShowMysticMan(string field, ConsoleColor foregroundColor) {
-      if (CellPositions.ContainsKey(field)) {
-        Position position = CellPositions[field];
-        ScreenWriter.Write("X", Position.Left + position.Left, Position.Top + position.Top, foregroundColor);
-      }
-    }
 
     public string GetSolution() {
       SolutionInputField.Read();

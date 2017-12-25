@@ -7,7 +7,7 @@
     }
 
     /// <inheritdoc />
-    public IntInputField(IScreenReader screenReader, IScreenInfo screenInfo) : base(screenReader, screenInfo){
+    public IntInputField(IScreenReader screenReader, IScreenInfo screenInfo, IScreenWriter screenWriter) : base(screenReader, screenWriter, screenInfo){
     }
   }
 }

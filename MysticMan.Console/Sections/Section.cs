@@ -152,14 +152,12 @@ namespace MysticMan.ConsoleApp.Sections {
       return buffer;
     }
 
-    protected TField CreateField<TField>(int x, int y, int length) where TField : FieldBase, new() {
-      TField field = new TField {
-        Left = x,
-        Top = y,
-        Length = length,
-        AutoDraw = true,
-        ScreenWriter = ScreenWriter
-      };
+    protected TField CreateField<TField>(int x, int y, int length) where TField : FieldBase {
+      TField field = (TField) Activator.CreateInstance(typeof(TField), ScreenWriter);
+      field.Left = x;
+      field.Top = y;
+      field.Length = length;
+      field.AutoDraw = true;
       _fields.Add(field);
       return field;
     }

@@ -87,6 +87,7 @@
     <Compile Include="Fields\InputFieldBase.cs" />
     <Compile Include="Fields\IntInputField.cs" />
     <Compile Include="Fields\NumberRangeInputField.cs" />
+    <Compile Include="Fields\SolutionInputField.cs" />
     <Compile Include="Fields\StringInputField.cs" />
     <Compile Include="GameSection.cs" />
     <Compile Include="Sections\Game\GameHeaderSection.cs" />

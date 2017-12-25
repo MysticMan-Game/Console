@@ -4,7 +4,7 @@ namespace MysticMan.ConsoleApp.Fields{
   public class StringField : Field<string>{
     public ConsoleColor ForeGround{ get; set; }
 
-    public StringField() {
+    public StringField(IScreenWriter screenWriter) : base(screenWriter) {
       ForeGround = Console.ForegroundColor;
     }
 

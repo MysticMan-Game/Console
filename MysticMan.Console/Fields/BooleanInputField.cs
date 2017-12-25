@@ -3,7 +3,7 @@
 namespace MysticMan.ConsoleApp.Fields {
   public class BooleanInputField : InputField<bool> {
     /// <inheritdoc />
-    public BooleanInputField(IScreenReader screenReader, IScreenInfo screenInfo) : base(screenReader, screenInfo) {
+    public BooleanInputField(IScreenReader screenReader, IScreenInfo screenInfo, IScreenWriter screenWriter) : base(screenReader, screenWriter, screenInfo) {
     }
 
     /// <inheritdoc />

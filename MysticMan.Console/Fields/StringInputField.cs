@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace MysticMan.ConsoleApp.Fields{
   public class StringInputField : InputField<string> {
-    public StringInputField(IScreenReader screenReader, IScreenInfo screenInfo):base(screenReader, screenInfo) {
+    public StringInputField(IScreenReader screenReader, IScreenWriter screenWriter, IScreenInfo screenInfo):base(screenReader, screenWriter, screenInfo) {
       
     }
     
