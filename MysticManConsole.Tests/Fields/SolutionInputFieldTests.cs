@@ -42,6 +42,31 @@ namespace MysticManConsole.Tests.Fields {
       Assert.AreEqual("B2", inputField.Input);
     }
 
+
+    [TestMethod]
+    public void ReadSolutionValidBoundariesFormat() {
+      Mock<IScreenReader> screenReaderMock = new Mock<IScreenReader>(MockBehavior.Strict);
+      Mock<IScreenInfo> screenInfoMock = new Mock<IScreenInfo>(MockBehavior.Strict);
+      Mock<IScreenWriter> screenWriter = new Mock<IScreenWriter>(MockBehavior.Loose);
+      SolutionInputField inputField = new SolutionInputField(new Size(5, 5), screenReaderMock.Object, screenWriter.Object, screenInfoMock.Object);
+
+      screenReaderMock.SetupSequence(_ => _.ReadLine(It.IsAny<Position>())).Returns("E5");
+      inputField.Read();
+      Assert.AreEqual("E5", inputField.Input);
+    }
+
+    [TestMethod]
+    public void ReadSolutionValidBoundaries10x10Format() {
+      Mock<IScreenReader> screenReaderMock = new Mock<IScreenReader>(MockBehavior.Strict);
+      Mock<IScreenInfo> screenInfoMock = new Mock<IScreenInfo>(MockBehavior.Strict);
+      Mock<IScreenWriter> screenWriter = new Mock<IScreenWriter>(MockBehavior.Loose);
+      SolutionInputField inputField = new SolutionInputField(new Size(10, 10), screenReaderMock.Object, screenWriter.Object, screenInfoMock.Object);
+
+      screenReaderMock.SetupSequence(_ => _.ReadLine(It.IsAny<Position>())).Returns("K6");
+      inputField.Read();
+      Assert.AreEqual("K6", inputField.Input);
+    }
+
     [TestMethod]
     public void ReadValidSolutionInLargeGameField() {
       Mock<IScreenReader> screenReaderMock = new Mock<IScreenReader>(MockBehavior.Strict);

@@ -10,8 +10,8 @@ namespace MysticMan.ConsoleApp.Fields{
 
 
       // Create a regular expression based on the size
-      string characterMatch = $"[A-{(char)(65 + size.Width - 1)}]";
-      string numberMatch = size.Height < 11 ? $"[1-{size.Height}]" : $"1[1-{size.Height - 10}]";
+      string characterMatch = $"[A-{(char)(65 + size.Width)}]";
+      string numberMatch = size.Height < 10 ? $"[1-{size.Height}]" : $"([1-9]|1[0-{size.Height - 10}])";
       _regex = new Regex(characterMatch + numberMatch, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     }
 
